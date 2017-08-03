@@ -1,0 +1,37 @@
+version: '3'
+
+volumes:
+  flask_data:
+
+services:
+  postgres:
+    image: postgres:9.6.1-alpine
+    environment:
+      - POSTGRES_USERNAME=flask_skeleton
+      - POSTGRES_DB=flask_skeleton
+      - POSTGRES_PASSWORD=mysecretpassword
+  flask:
+    image: btquanto/docker-flask-py3:latest
+    environment:
+      - UWSGI_CONFIG_FILE=uwsgi_config.ini
+    links:
+      - postgres
+    volumes:
+      - ./:/src
+      - flask_data:/tmp/
+    entrypoint: ["/bin/bash", "/src/scripts/flask.sh"]
+  nginx:
+    image: nginx:1.13.0-alpine
+    ports:
+      - 8080:8080
+      - 8088:8088
+    links:
+      - flask
+    depends_on:
+      - flask
+    volumes:
+      - ./:/src
+      - ./scripts/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+      - flask_data:/tmp/
+
+    command: ["nginx", "-g", "daemon off;"]

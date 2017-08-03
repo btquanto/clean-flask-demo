@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+cd /src
+
+if [ -f requirements.txt ]
+then
+    echo "Checking for package updates...";
+    pip install -Ur requirements.txt;
+fi;
+
+if [ "uwsgi_config.ini" ]
+then
+    exec uwsgi --ini uwsgi_config.ini
+else
+    exec uwsgi --http 0.0.0.0:8000 -w application:app
+fi;
