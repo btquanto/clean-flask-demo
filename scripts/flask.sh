@@ -13,12 +13,12 @@ then
 fi;
 if $DEBUG
 then
-    python3 app.py
+    python3 initialization.py
 else
     if [ "uwsgi_config.ini" ]
     then
         exec uwsgi --ini uwsgi_config.ini --logto ./logs/uwsgi.log
     else
-        exec uwsgi --http 0.0.0.0:8000 -w application:app
+        exec uwsgi --http 0.0.0.0:8000 -w initialization:app
     fi;
 fi;

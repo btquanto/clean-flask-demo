@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..core import db
+from . import db
 from ..core.access import RoleMixin as RbacRoleMixin
 
 roles_parents = db.Table(
