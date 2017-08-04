@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from flask import redirect, url_for
+
 from application import app, db, login_manager, session, rbac
 from application.models import User, Role
 from application.core.access import load_user

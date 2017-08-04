@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Libraries
 from flask import Flask
-from flask import redirect, url_for
 
 from flask_login import LoginManager
 from flask_session import Session
