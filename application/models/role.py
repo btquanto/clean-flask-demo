@@ -34,5 +34,10 @@ class Role(db.Model, RbacRoleMixin):
             self.add_parent(parent)
 
     @staticmethod
-    def get_by_name(name):
-        return Role.query.filter_by(name=name).first()
+    def get_by_name(cls, name):
+        return cls.query.filter_by(name=name).first()
+
+    @staticmethod
+    def get_parent_roles(cls):
+        return cls.query.filter_by(~cls.id._in(db.session.query(roles_parents.id).all()))
+

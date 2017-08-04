@@ -5,13 +5,17 @@ from . import db, rbac
 
 users_roles = db.Table(
     'users_roles',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
 )
 
 class User(db.Model, LoginUserMixin, RbacUserMixin):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30))
+    password = db.Column(db.String(255))
+
     # Other columns
     roles = db.relationship(
         'Role',
