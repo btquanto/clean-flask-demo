@@ -19,6 +19,6 @@ else
     then
         exec uwsgi --ini uwsgi_config.ini --logto ./logs/uwsgi.log
     else
-        exec uwsgi --http 0.0.0.0:8000 -w initialization:app
+        exec uwsgi --socket 0.0.0.0:8000 -w initialization:app
     fi;
 fi;
