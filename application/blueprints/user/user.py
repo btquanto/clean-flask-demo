@@ -3,6 +3,8 @@ import bcrypt
 
 from flask import Blueprint, render_template, jsonify, request
 from jinja2 import TemplateNotFound
+from sqlalchemy.orm.exc import MultipleResultsFound
+
 from .. import app, db
 from ...models import User
 
@@ -45,7 +47,19 @@ def login():
             "error" : "missing_params"
         })
     
-    user = User.query.filter_by(username=username).first()
+    try:
+        user = User.query.filter_by(username=username).scalar()
+    except MultipleResultsFound:
+        return jsonify({
+            "success" : False,
+            "error" : "duplicated_users_found"
+        })
+    except Exception as e:
+        app.logger.error(e)
+        return jsonify({
+            "success" : False,
+            "error" : "server_error"
+        })
 
     if user is None:
         return jsonify({
