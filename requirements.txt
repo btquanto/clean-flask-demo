@@ -15,3 +15,4 @@ pytz==2017.2
 simplejson==3.10.0
 sqlalchemy==1.1.9
 uwsgi==2.0.15
+elasticsearch==5.4.0

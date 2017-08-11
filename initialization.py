@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import redirect, url_for
 
-from application import app, db, login_manager, session, rbac
+from application import app, db, login_manager, session, rbac, es
 from application.models import User, Role
 from application.core.access import load_user
 from application.core.reverse_proxied import ReverseProxied
@@ -28,6 +28,9 @@ session.init_app(app)
 rbac.init_app(app)
 rbac.role_model(Role)
 rbac.user_model(User)
+
+# Elastic Search
+es.init_app(app)
 
 # Register blueprints
 app.register_blueprint(home.node, url_prefix="/home")
