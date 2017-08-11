@@ -6,6 +6,7 @@ from flask_login import LoginManager
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from .core.access import RBAC
+from .core.elastic import FlaskElasticsearch
 
 # The application
 app = Flask(__name__)
@@ -15,3 +16,4 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 session = Session()
 rbac = RBAC()
+es = FlaskElasticsearch()
