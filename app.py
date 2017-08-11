@@ -5,7 +5,7 @@ from application import app, db, login_manager, session, rbac, es
 from application.models import User, Role
 from application.core.access import load_user
 from application.core.reverse_proxied import ReverseProxied
-from application.blueprints import home, user
+from application.blueprints import home, user, elastic
 
 # Constants
 CONFIGURATION_FILE = "config/flaskconfig.py"
@@ -35,6 +35,7 @@ es.init_app(app)
 # Register blueprints
 app.register_blueprint(home.node, url_prefix="/home")
 app.register_blueprint(user.node, url_prefix="/user")
+app.register_blueprint(elastic.node, url_prefix="/elastic")
 
 # Default route
 @app.route('/')

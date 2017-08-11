@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEBUG=false;
+DEBUG=true;
 
 set -e
 

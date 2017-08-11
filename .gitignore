@@ -3,3 +3,4 @@
 flaskconfig.py
 scripts/gunicorn_config.py
 logs/uwsgi.log
+node_modules

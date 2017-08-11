@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+  <title>ElasticSearch Ingest Attachment Plugin Example</title>
+  
+  <link rel="stylesheet" href="/{{ request.blueprint }}/static/bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="/{{ request.blueprint }}/static/bower_components/fontawesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="/{{ request.blueprint }}/static/elastic/elastic.css" />
+</head>
+
+<body>
+ 
+<div class="container" style="padding: 15px">
+  <form class="row" data-bind="submit: reload">
+    <p class="col-md-8">
+      <input type="search" class="form-control" data-bind="value: q" />
+    </p>
+   
+      <div class="col-md-2 dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="select" data-toggle="dropdown"><em>Select your Index</em>
+        <span class="caret"></span></button>
+        <ul id="demolist" class="dropdown-menu" data-bind="foreach: dropDown">
+          <li><a href="#" data-bind="text: $data, click: $parent.changeDropdown"></a></li>
+          
+        </ul>
+        
+      </div>
+   
+    <p class="col-md-1">
+      <button class="btn btn-default btn-block" data-bind="click: reload">Filter</button>
+    </p>
+    <p class="col-md-1">
+      <button class="btn btn-block" data-bind="click: clear">Clear</button>
+    </p>
+  </form>
+
+  <ul class="list-group" data-bind="foreach: hits">
+    <li class="list-group-item">
+      <div class="media">
+        <div class="media-body">
+          <i data-bind="css: icon"></i>
+          <strong data-bind="text: filename"></strong>
+        </div>
+        <div class="media-right" data-bind="if: _score > 0">
+          Score:<strong data-bind="text: _score"></strong>
+        </div>
+        <div class="media-right">
+          <a class="text-danger" href="#" data-bind="click: $root.delete" title="delete"><span class="fa fa-remove"></span></a>
+        </div>
+      </div>
+      <div data-bind="if: hasHighlights">
+        <ol data-bind="foreach: highlight['attachment.content']">
+          <li data-bind="html: $data"></li>
+        </ol>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<script type="text/javascript" src="/{{ request.blueprint }}/static/bower_components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/static/rx/rx.all.js"></script>
+<script type="text/javascript" src="/static/rx/rx.jquery.min.js"></script>
+<script type="text/javascript" src="/{{ request.blueprint }}/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="/{{ request.blueprint }}/static/bower_components/knockout/dist/knockout.debug.js"></script>
+<script type="text/javascript" src="/{{ request.blueprint }}/static/elastic/elastic.js"></script>
+
+<script type="text/javascript">
+
+var indices = new Rx.BehaviorSubject([]);
+indices.subscribe(function(value) {
+  // Render value
+    console.log(value);
+})
+
+$.ajaxAsObservable({
+		url: '/{{ request.blueprint }}/indices'
+	}).subscribe(response => {
+    if(response.data.success) {
+      indices.onNext(response.data.data);
+    } else {
+    }
+  });
+</script>
+</body>
+</html>
