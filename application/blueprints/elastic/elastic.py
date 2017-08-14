@@ -8,13 +8,9 @@ node = Blueprint("elastic", __name__,
                     template_folder="templates",
                     static_folder="static")
 
-@node.route('/index')
-def index():
-    return render_template("elastic/index.html", 
-                            elastic_host=app.config["ELASTICSEARCH_HOST"],
-                            elastic_index="thienquan", 
-                            elastic_type="document")
-
+@node.route('/webpack')
+def webpack():
+    return render_template("elastic/webpack.html")
 
 @node.route('/index')
 def index():
@@ -22,7 +18,6 @@ def index():
                             elastic_host=app.config["ELASTICSEARCH_HOST"],
                             elastic_index="thienquan", 
                             elastic_type="document")
-
 
 @node.route('/test/index')
 def test():

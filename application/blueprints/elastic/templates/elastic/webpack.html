@@ -1,8 +1,69 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <script type="text/javascript" src="/{{ request.blueprint }}/static/js/elastic/elastic.`bundle.js" charset="utf-8"></script>
-    </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+  <title>ElasticSearch Ingest Attachment Plugin Example</title>
+</head>
+
+<body>
+ 
+<div class="container" style="padding: 15px">
+  <form class="row" data-bind="submit: reload">
+    <p class="col-md-8">
+      <input type="search" class="form-control" data-bind="value: q" />
+    </p>
+   
+      <div class="col-md-2 dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="select" data-toggle="dropdown"><em>Select your Index</em>
+        <span class="caret"></span></button>
+        <ul id="demolist" class="dropdown-menu">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>5</li>
+          <li>6</li>
+          <li>7</li>
+        </ul>
+      </div>
+   
+    <p class="col-md-1">
+      <button class="btn btn-default btn-block" data-bind="click: reload">Filter</button>
+    </p>
+    <p class="col-md-1">
+      <button class="btn btn-block" data-bind="click: clear">Clear</button>
+    </p>
+  </form>
+
+  <ul class="list-group" data-bind="foreach: hits">
+    <li class="list-group-item">
+      <div class="media">
+        <div class="media-body">
+          <i data-bind="css: icon"></i>
+          <strong data-bind="text: filename"></strong>
+        </div>
+        <div class="media-right" data-bind="if: _score > 0">
+          Score:<strong data-bind="text: _score"></strong>
+        </div>
+        <div class="media-right">
+          <a class="text-danger" href="#" data-bind="click: $root.delete" title="delete"><span class="fa fa-remove"></span></a>
+        </div>
+      </div>
+      <div data-bind="if: hasHighlights">
+        <ol data-bind="foreach: highlight['attachment.content']">
+          <li data-bind="html: $data"></li>
+        </ol>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<script type="text/javascript" src="/static/js/{{ request.blueprint }}.bundle.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+</script>
+</body>
 </html>
+
+
