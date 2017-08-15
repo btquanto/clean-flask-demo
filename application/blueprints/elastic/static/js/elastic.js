@@ -12,9 +12,10 @@ var $ = jQuery;
 var model = new ElasticModel({
   api : {
     indices: '/elastic/indices',
-    query: '/elastic/query/'
+    query: '/elastic/query'
   },
   indicesSelector : 'ul#demolist',
+  hitsSelector : 'ul#hits',
 });
 
 model.requestIndices();

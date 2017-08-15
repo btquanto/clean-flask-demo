@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
   <title>ElasticSearch Ingest Attachment Plugin Example</title>
+  <style>
+    mark, em {
+      background: yellow;
+    }
+  </style>
 </head>
-
 <body>
- 
 <div class="container" style="padding: 15px">
   <form class="row" data-bind="submit: reload">
     <p class="col-md-8">
@@ -15,16 +18,9 @@
     </p>
    
       <div class="col-md-2 dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="select" data-toggle="dropdown"><em>Select your Index</em>
+        <button class="btn btn-primary dropdown-toggle" type="button" id="select" data-toggle="dropdown">Select your Index
         <span class="caret"></span></button>
         <ul id="demolist" class="dropdown-menu">
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-          <li>4</li>
-          <li>5</li>
-          <li>6</li>
-          <li>7</li>
         </ul>
       </div>
    
@@ -36,7 +32,7 @@
     </p>
   </form>
 
-  <ul class="list-group" data-bind="foreach: hits">
+  <ul id="hits" class="list-group">
     <li class="list-group-item">
       <div class="media">
         <div class="media-body">
@@ -60,9 +56,6 @@
 </div>
 
 <script type="text/javascript" src="/static/js/{{ request.blueprint }}.bundle.js" charset="utf-8"></script>
-<script type="text/javascript">
-
-</script>
 </body>
 </html>
 

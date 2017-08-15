@@ -34,24 +34,29 @@ def list_indices():
         "data" : indices
     })
 
-@node.route('/query/<index>', methods=['GET', 'POST'])
-def query(index):
+@node.route('/query', methods=['GET', 'POST'])
+def query():
+    index = request.values.get("index", None)
+    if index is None:
+        return jsonify(success = False, error = "missing_index")
     keyword = request.values.get("keyword", None)
-    search_result = es.client.search(index, "document", body = {
+    body = {
         "_source": ["filename", "title", "page_number" ],
-            "query" : {
-                "match" : { "attachment.content": keyword }
-            },
-            "highlight": {
-                "fields" : {
-                    "attachment.content" : {
-                        "fragment_size" : 150,
-                        "number_of_fragments" : 3,
-                        "no_match_size": 50
-                    }
+        "highlight": {
+            "fields" : {
+                "attachment.content" : {
+                    "fragment_size" : 150,
+                    "number_of_fragments" : 3,
+                    "no_match_size": 50
                 }
+            }
         }
-    })
+    }
+    if keyword is not None:
+        body["query"] = {
+            "match" : { "attachment.content": keyword }
+        }
+    search_result = es.client.search(index, "document", body = body)
 
     hits = search_result["hits"]["hits"]
 

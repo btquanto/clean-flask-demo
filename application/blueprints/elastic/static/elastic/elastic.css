@@ -1,41 +1,43 @@
  html, body {
-      height: 100vh;
-    }
-    #loader {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      z-index: 1;
-      width: 150px;
-      height: 150px;
-      margin: -75px 0 0 -75px;
-      border: 16px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 16px solid #3498db;
-      width: 120px;
-      height: 120px;
-      -webkit-animation: spin 2s linear infinite;
-      animation: spin 2s linear infinite;
-    }
-    mark {
-      background: yellow;
-    }
+  height: 100vh;
+}
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
 
-    .drop:after {
-      content: 'Drop files here';
-      pointer-events: none;
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      background-color: #999;
-      background-image: radial-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%);
-      opacity: .5;
-      color: white;
-      line-height: 100vh;
-      text-align: center;
-      font-size: 10vh;
-      text-transform: uppercase;
-      text-shadow: 1px 1px 5px #000;
-    }
+mark, em {
+  background: yellow;
+
+}
+
+.drop:after {
+  content: 'Drop files here';
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #999;
+  background-image: radial-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%);
+  opacity: .5;
+  color: white;
+  line-height: 100vh;
+  text-align: center;
+  font-size: 10vh;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 5px #000;
+}
