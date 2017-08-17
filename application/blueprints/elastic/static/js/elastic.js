@@ -16,6 +16,17 @@ var model = new ElasticModel({
   },
   indicesSelector : 'ul#demolist',
   hitsSelector : 'ul#hits',
+  keywordInputSelector : 'input#keyword'
 });
 
 model.requestIndices();
+
+Rx.Observable.fromEvent($('ul#demolist'), 'change')
+  .subscribe(e => {
+    $('button#select')
+      .text($('ul#demolist').val())
+      .append($('<span/>').addClass('caret'));
+  });
+
+Rx.Observable.fromEvent($('button#filter'), 'click')
+  .subscribe(e => model.search($('ul#demolist').val(), $('input#keyword').val()));

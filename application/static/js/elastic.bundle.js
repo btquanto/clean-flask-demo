@@ -16939,10 +16939,19 @@ var model = new _elasticModel2.default({
     query: '/elastic/query'
   },
   indicesSelector: 'ul#demolist',
-  hitsSelector: 'ul#hits'
+  hitsSelector: 'ul#hits',
+  keywordInputSelector: 'input#keyword'
 });
 
 model.requestIndices();
+
+_Rx2.default.Observable.fromEvent($('ul#demolist'), 'change').subscribe(function (e) {
+  $('button#select').text($('ul#demolist').val()).append($('<span/>').addClass('caret'));
+});
+
+_Rx2.default.Observable.fromEvent($('button#filter'), 'click').subscribe(function (e) {
+  return model.search($('ul#demolist').val(), $('input#keyword').val());
+});
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
 
 /***/ }),
@@ -31710,13 +31719,13 @@ var ElasticModel = function () {
 
         this.opts = opts;
 
-        var $ = _jquery2.default;
-
         this.indices = new _Rx2.default.BehaviorSubject([]);
         this.hits = new _Rx2.default.BehaviorSubject([]);
+        this.keyword = new _Rx2.default.BehaviorSubject([]);
 
         this.$indexList = $(opts.indicesSelector);
         this.$hitList = $(opts.hitsSelector);
+        this.$keywordInput = $(opts.keywordInputSelector);
 
         this.indices.subscribe(function (indices) {
             return _this.renderIndices(indices);
@@ -31748,34 +31757,39 @@ var ElasticModel = function () {
         value: function renderIndices(indices) {
             var _this3 = this;
 
-            var self = this;
             this.$indexList.empty();
             for (var i = 0; i < indices.length; i++) {
                 var index = indices[i];
-                var $li = $('<li />').append($('<a/>').html(index));
+                var $li = $('<li />').attr("value", index).append($('<a/>').html(index));
                 this.$indexList.append($li);
                 _Rx2.default.Observable.fromEvent($li, 'click').map(function (e) {
-                    return { model: self, index: e.target.innerText };
-                }).subscribe(function (data) {
-                    return _this3.onItemClicked(data.model, data.index);
+                    return e.target.innerText;
+                }).subscribe(function (idx) {
+                    _this3.$indexList.val(idx).change();
+                    _this3.search(idx, _this3.$keywordInput.val());
                 });
             }
         }
     }, {
-        key: 'onItemClicked',
-        value: function onItemClicked(model, index) {
-            var self = this;
+        key: 'search',
+        value: function search(index, keyword) {
+            var _this4 = this;
+
+            var data = {
+                index: index
+            };
+            if (keyword) {
+                data.keyword = keyword;
+            }
             _Rx2.default.Observable.defer(function () {
                 return _Rx2.default.Observable.fromPromise($.ajax({
                     method: "POST",
-                    url: model.opts.api.query,
-                    data: {
-                        index: index
-                    }
+                    url: _this4.opts.api.query,
+                    data: data
                 }));
             }).subscribe(function (response) {
                 if (response.success != false) {
-                    self.hits.next(response);
+                    _this4.hits.next(response);
                 } else {
                     console.log("Failure============");
                     console.log(response);
@@ -31785,25 +31799,26 @@ var ElasticModel = function () {
         }
     }, {
         key: 'renderHits',
-        value: function renderHits(file_hits) {
-            var self = this;
+        value: function renderHits(hits) {
             this.$hitList.empty();
-            console.log(file_hits);
-            for (var i = 0; i < file_hits.length; i++) {
-                var file_hit = file_hits[i];
+            console.log(hits);
+            for (var i = 0; i < hits.length; i++) {
+                var hit = hits[i];
 
                 var $highlights = $('<ol/>');
-                var hits = file_hit.hits;
-                for (var j = 0; j < hits.length; j++) {
-                    var hit = hits[j];
-                    var highlights = hit.content;
-                    for (var k = 0; k < highlights.length; k++) {
-                        var highlight = highlights[k];
-                        $highlights.append($('<li/>').addClass('media').append($('<div/>').addClass('media-body').html(highlight)).append($('<div/>').addClass('media-right').html('p' + hit.page_number)));
+                var pages = hit.pages;
+                for (var j = 0; j < pages.length; j++) {
+                    var page = pages[j];
+                    if (page.highlights) {
+                        var highlights = page.highlights;
+                        for (var k = 0; k < highlights.length; k++) {
+                            var highlight = highlights[k];
+                            $highlights.append($('<li/>').addClass('media').append($('<div/>').addClass('media-body').html(highlight)).append($('<div/>').addClass('media-right').append($('<strong/>').html('p' + page.page_number))));
+                        }
                     }
                 }
 
-                var $li = $('<li />').addClass('list-group-item').append($('<div/>').addClass('media').append($('<div/>').addClass('media-body').append($('<i/>').text('icon')).append($('<strong/>').html(file_hit.title))).append($('<div/>').addClass('media-right').html('Score: ').append($('<strong/>').html('XXX')))).append($('<div>').append($highlights));
+                var $li = $('<li />').addClass('list-group-item').append($('<div/>').addClass('media').append($('<div/>').addClass('media-body').append($('<strong/>').html(hit.title.substr(7))))).append($('<div>').append($highlights));
                 this.$hitList.append($li);
             }
         }

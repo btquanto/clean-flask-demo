@@ -58,25 +58,30 @@ def query():
         }
     search_result = es.client.search(index, "document", body = body)
 
+    # return Response(json.dumps(search_result, ensure_ascii=False, indent=4),content_type="application/json; charset=utf-8" )
+
     hits = search_result["hits"]["hits"]
 
     hits_dict = {}
 
     for hit in hits:
         source = hit["_source"]
-        content = hit["highlight"]["attachment.content"]
+        highlights = hit["highlight"]["attachment.content"]
         result = {
-            "title" : source["title"],
+            "score" : hit["_score"],
             "filename" : source["filename"],
             "page_number" : source["page_number"],
-            "content" : content
+            "highlights" : highlights
         }
+
+        if result["score"] == 1.0:
+            del result["highlights"]
 
         data = hits_dict.get(source["title"], [])
         data.append(result)
         hits_dict[source["title"]] = data
 
-    json_string = json.dumps([ { "title" : key, "hits" : value} for key, value in hits_dict.items()], ensure_ascii=False, indent=4)
+    json_string = json.dumps([ { "title" : key, "pages" : value} for key, value in hits_dict.items()], ensure_ascii=False, indent=4)
     response = Response(json_string,content_type="application/json; charset=utf-8" )
     return response
 

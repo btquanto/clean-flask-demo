@@ -12,9 +12,9 @@
 </head>
 <body>
 <div class="container" style="padding: 15px">
-  <form class="row" data-bind="submit: reload">
+  <div class="row">
     <p class="col-md-8">
-      <input type="search" class="form-control" data-bind="value: q" />
+      <input id='keyword' type="search" class="form-control" />
     </p>
    
       <div class="col-md-2 dropdown">
@@ -25,12 +25,12 @@
       </div>
    
     <p class="col-md-1">
-      <button class="btn btn-default btn-block" data-bind="click: reload">Filter</button>
+      <button id="filter" class="btn btn-default btn-block" >Filter</button>
     </p>
     <p class="col-md-1">
-      <button class="btn btn-block" data-bind="click: clear">Clear</button>
+      <button class="btn btn-block" >Clear</button>
     </p>
-  </form>
+  </div>
 
   <ul id="hits" class="list-group">
     <li class="list-group-item">

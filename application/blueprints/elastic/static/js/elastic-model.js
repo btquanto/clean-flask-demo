@@ -7,13 +7,13 @@ class ElasticModel {
     constructor (opts) {
         this.opts = opts;
         
-        var $ = jQuery;
-        
         this.indices = new Rx.BehaviorSubject([]);
         this.hits = new Rx.BehaviorSubject([]);
+        this.keyword = new Rx.BehaviorSubject([]);
         
         this.$indexList = $(opts.indicesSelector);
         this.$hitList = $(opts.hitsSelector);
+        this.$keywordInput = $(opts.keywordInputSelector);
 
         this.indices.subscribe(indices => this.renderIndices(indices));
         this.hits.subscribe(hits => this.renderHits(hits));
@@ -30,62 +30,69 @@ class ElasticModel {
             });
     }
     renderIndices(indices){
-        var self = this;
         this.$indexList.empty();
         for (var i = 0; i < indices.length; i++) {
             var index = indices[i];
-            var $li = $('<li />').append($('<a/>').html(index));
+            var $li = $('<li />')
+                        .attr("value", index)
+                        .append($('<a/>').html(index));
             this.$indexList.append($li);
             Rx.Observable.fromEvent($li, 'click')
-                .map(e => { return { model: self, index: e.target.innerText }})
-                .subscribe(data => this.onItemClicked(data.model, data.index));
+                .map(e => e.target.innerText)
+                .subscribe(idx => {
+                    this.$indexList.val(idx).change();
+                    this.search(idx, this.$keywordInput.val());
+                });
         }
-
     }
-    onItemClicked(model, index) {
-        var self = this;
+    search(index, keyword) {
+        var data = {
+            index: index
+        };
+        if (keyword) {
+            data.keyword = keyword;
+        }
         Rx.Observable.defer(() => Rx.Observable.fromPromise($.ajax({
-                method: "POST",
-                url: model.opts.api.query,
-                data: {
-                    index: index,
-                },
-            }))).subscribe(response => {
-                if(response.success != false) {
-                    self.hits.next(response);
-                } else {
-                    console.log("Failure============");
-                    console.log(response);
-                    console.log("==================");
-                }
-            });
+            method: "POST",
+            url: this.opts.api.query,
+            data: data
+        }))).subscribe(response => {
+            if(response.success != false) {
+                this.hits.next(response);
+            } else {
+                console.log("Failure============");
+                console.log(response);
+                console.log("==================");
+            }
+        });
     }
-    renderHits(file_hits) {
-        var self = this;
+    renderHits(hits) {
         this.$hitList.empty();
-        console.log(file_hits);
-        for(var i = 0; i < file_hits.length; i++) {
-            var file_hit = file_hits[i];
+        console.log(hits);
+        for(var i = 0; i < hits.length; i++) {
+            var hit = hits[i];
 
             var $highlights = $('<ol/>');
-            var hits = file_hit.hits;
-            for (var j = 0; j < hits.length; j++) {
-                var hit = hits[j];
-                var highlights = hit.content;
-                for (var k = 0; k < highlights.length; k++) {
-                    var highlight = highlights[k];
-                    $highlights
-                        .append($('<li/>')
-                            .addClass('media')
-                            .append($('<div/>')
-                                .addClass('media-body')
-                                .html(highlight)
-                            )
-                            .append($('<div/>')
+            var pages = hit.pages;
+            for (var j = 0; j < pages.length; j++) {
+                var page = pages[j];
+                if(page.highlights) {
+                    var highlights = page.highlights;
+                    for (var k = 0; k < highlights.length; k++) {
+                        var highlight = highlights[k];
+                        $highlights
+                            .append($('<li/>')
+                                .addClass('media')
+                                .append($('<div/>')
+                                    .addClass('media-body')
+                                    .html(highlight)
+                                )
+                                .append($('<div/>')
                                 .addClass('media-right')
-                                .html('p' + hit.page_number)
-                            )
-                        );
+                                .append($('<strong/>').html('p' + page.page_number))
+                                )
+                            );
+                    }
                 }
             }
             
@@ -95,13 +102,7 @@ class ElasticModel {
                     .addClass('media')
                     .append($('<div/>')
                         .addClass('media-body')
-                        .append($('<i/>').text('icon'))
-                        .append($('<strong/>').html(file_hit.title))
-                    )
-                    .append($('<div/>')
-                        .addClass('media-right')
-                        .html('Score: ')
-                        .append($('<strong/>').html('XXX'))
+                        .append($('<strong/>').html(hit.title.substr(7)))
                     )
                 )
                 .append($('<div>').append($highlights));
