@@ -4,9 +4,9 @@ services:
   postgres:
     image: postgres:9.6.1-alpine
     environment:
-      POSTGRES_USER: flask_skeleton
-      POSTGRES_DB: flask_skeleton
-      POSTGRES_PASSWORD: mysecretpassword2
+      POSTGRES_USER: crossmedia
+      POSTGRES_DB: crossmedia
+      POSTGRES_PASSWORD: mysecretpassword
   flask:
     image: btquanto/docker-flask-py3:latest
     environment:
@@ -15,12 +15,13 @@ services:
       - postgres
     volumes:
       - ./:/src
+      - /home/ec2-user/data:/data
+      - /home/ec2-user/pages:/pages
     entrypoint: ["/bin/bash", "/src/scripts/flask.sh"]
   nginx:
     image: nginx:1.13.0-alpine
     ports:
-      - 8080:8080
-      - 8088:8088
+      - 80:8080
     links:
       - flask
     depends_on:

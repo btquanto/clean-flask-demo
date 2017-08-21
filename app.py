@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import redirect, url_for
+import os
+from flask import render_template, request, url_for, redirect, send_from_directory
+from werkzeug.utils import secure_filename
 
 from application import app, db, login_manager, session, rbac, es
 from application.models import User, Role
@@ -40,7 +42,55 @@ app.register_blueprint(elastic.node, url_prefix="/elastic")
 # Default route
 @app.route('/')
 def bootstrap():
-    return redirect('/home/index')
+    return redirect('/elastic/index')
+
+@app.route('/elastic')
+def elastic():
+    return redirect('/elastic/index')
+
+# For a given file, return whether it's an allowed type or not
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+
+@app.route("/download/<filename>")
+def download(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+@app.route("/download/page/<filename>")
+def download_page(filename):
+    return send_from_directory(app.config['PAGES_FOLDER'], filename)
+
+@app.route('/success/')
+def success():
+    return render_template('index.html')
+
+@app.route('/error/')
+def error():
+    return render_template('upload.html')
+
+# Route that will process the file upload
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        if 'files' not in request.files:
+            return "No file part"
+        files = request.files.getlist("files")
+
+        if not files:
+            return "No selected file"
+
+        if files:
+            for file in files:
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#        return redirect(url_for('download',
+#                                            filename=filename))
+
+    return render_template("upload.html")
+
 
 if __name__ == '__main__':
     app.run(host=app.config['HOST'], port=app.config['PORT'], debug=True)

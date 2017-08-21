@@ -6,11 +6,11 @@ var $ = jQuery;
 class ElasticModel {
     constructor (opts) {
         this.opts = opts;
-        
+
         this.indices = new Rx.BehaviorSubject([]);
         this.hits = new Rx.BehaviorSubject([]);
         this.keyword = new Rx.BehaviorSubject([]);
-        
+
         this.$indexList = $(opts.indicesSelector);
         this.$hitList = $(opts.hitsSelector);
         this.$keywordInput = $(opts.keywordInputSelector);
@@ -58,7 +58,7 @@ class ElasticModel {
             data: data
         }))).subscribe(response => {
             if(response.success != false) {
-                this.hits.next(response);
+                this.hits.next(response.hits);
             } else {
                 console.log("Failure============");
                 console.log(response);
@@ -95,7 +95,7 @@ class ElasticModel {
                     }
                 }
             }
-            
+
             var $li = $('<li />')
                 .addClass('list-group-item')
                 .append($('<div/>')
