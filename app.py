@@ -8,7 +8,7 @@ from application.core.reverse_proxied import ReverseProxied
 from application.blueprints import home, user
 
 # Constants
-CONFIGURATION_FILE = "config/flaskconfig.py"
+CONFIGURATION_FILE = "../config/flaskconfig.py"
 
 # Configuration
 app.config.from_pyfile(CONFIGURATION_FILE, silent=False)

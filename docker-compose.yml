@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: flask_skeleton
       POSTGRES_DB: flask_skeleton
-      POSTGRES_PASSWORD: mysecretpassword2
+      POSTGRES_PASSWORD: mysecretpassword
   flask:
     image: btquanto/docker-flask-py3:latest
     environment:

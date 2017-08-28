@@ -9,16 +9,18 @@ HOST = "0.0.0.0"
 DOMAIN = "localhost"
 PORT = 8000
 
+JSON_AS_ASCII = False
+
 # Flask-Session
 SESSION_TYPE = None
 SESSION_PERMANENT = True
 
 # Sql Alchemy
 SQLALCHEMY_DATABASE_URI = "postgres://{dbusername}:{dbpassword}@{dbhost}/{dbname}".format(
-    dbusername="postgres",
-    dbpassword="mysecretpassword",
     dbhost="postgres",
-    dbname="postgres")
+    dbname="flask-skeleton",
+    dbusername="flask-skeleton",
+    dbpassword="mysecretpassword")
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_POOL_SIZE = 10
