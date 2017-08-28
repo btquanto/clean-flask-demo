@@ -7,6 +7,8 @@
         "**/.DS_Store": true,
         "**/.vscode": true,
         "**/__pycache__": true,
-        "logs" : true
+        "node_modules" : true,
+        "logs" : true,
+        "package-lock.json": true
     }
 }
