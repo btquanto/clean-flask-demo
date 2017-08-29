@@ -6,7 +6,7 @@ from . import db, rbac
 users_roles = db.Table(
     'users_roles',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
+    db.Column('role_id', db.Integer, db.ForeignKey('roles.id'))
 )
 
 class User(db.Model, LoginUserMixin, RbacUserMixin):
@@ -18,10 +18,11 @@ class User(db.Model, LoginUserMixin, RbacUserMixin):
 
     # Other columns
     roles = db.relationship(
-        'Role',
+        'Role', 
         secondary=users_roles,
-        backref=db.backref('roles', lazy='dynamic')
+        backref=db.backref('users', lazy='dynamic')
     )
+    auth_keys = db.relationship('AuthKey', backref='user', lazy=True)
 
     def add_role(self, role):
         self.roles.append(role)

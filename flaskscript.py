@@ -3,7 +3,7 @@ from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
 from flask_alchemydumps import AlchemyDumps, AlchemyDumpsCommand
 
-from initialization import app, db
+from app import app, db
 from application.models import *
 
 migrate = Migrate(app, db)

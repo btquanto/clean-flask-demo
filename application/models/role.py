@@ -4,11 +4,13 @@ from ..core.access import RoleMixin as RbacRoleMixin
 
 roles_parents = db.Table(
     'roles_parents',
-    db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
-    db.Column('parent_id', db.Integer, db.ForeignKey('role.id'))
+    db.Column('role_id', db.Integer, db.ForeignKey('roles.id')),
+    db.Column('parent_id', db.Integer, db.ForeignKey('roles.id'))
 )
 
 class Role(db.Model, RbacRoleMixin):
+    __tablename__ = 'roles'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
 
