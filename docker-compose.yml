@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.2'
 
 services:
   postgres:
@@ -14,7 +14,9 @@ services:
     links:
       - postgres
     volumes:
-      - ./:/src
+      - type: bind
+        source: ./
+        target: /src
     entrypoint: ["/bin/bash", "/src/scripts/flask.sh"]
   nginx:
     image: nginx:1.13.0-alpine
@@ -26,7 +28,7 @@ services:
     depends_on:
       - flask
     volumes:
-      - ./:/src
+      - ./:/src:ro
       - ./scripts/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
 
     command: ["nginx", "-g", "daemon off;"]
