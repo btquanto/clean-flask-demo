@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from .application import app, db, login_manager, session, rbac, es
+from .application import app, db, lm, apilm, session, rbac, es

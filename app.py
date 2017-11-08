@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import redirect, url_for
 
-from application import app, db, login_manager, session, rbac, es
+from application import app, db, lm, apilm, session, rbac, es
 from application.models import User, Role
-from application.core.access import load_user
 from application.core.reverse_proxied import ReverseProxied
 from application.blueprints import home, user
 
@@ -17,9 +16,14 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 # SQLAlchemy
 db.init_app(app)
 
-# Flask-Login
-login_manager.init_app(app)
-login_manager.user_loader(load_user)
+# Login Managers
+def user_loader(user_id):
+    return User.get(user_id)
+
+lm.init_app(app)
+lm.user_loader(user_loader)
+
+apilm.init_app(app, with_session=False)
 
 # Flask-Session
 session.init_app(app)
