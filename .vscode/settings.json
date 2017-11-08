@@ -10,5 +10,6 @@
         "node_modules" : true,
         "logs" : true,
         "package-lock.json": true
-    }
+    },
+    "files.trimTrailingWhitespace": true
 }

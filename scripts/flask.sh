@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DEBUG=false;
+DEBUG=true;
+SKIP_REQUIREMENTS_CHECK=true;
 
 set -e
 
@@ -8,8 +9,11 @@ cd /src
 
 if [ -f requirements.txt ]
 then
-    echo "Checking for package updates...";
-    pip install -Ur requirements.txt;
+    if ! $SKIP_REQUIREMENTS_CHECK
+    then
+        echo "Checking for package updates...";
+        pip3 install -Ur requirements.txt;
+    fi;
 fi;
 if $DEBUG
 then
