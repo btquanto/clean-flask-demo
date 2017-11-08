@@ -15,6 +15,8 @@ class User(db.Model, LoginUserMixin, RbacUserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30))
     password = db.Column(db.String(255))
+    auth_key = db.Column(db.String(255))
+    session_expiry = db.Column(db.DateTime, nullable=True)
 
     # Other columns
     roles = db.relationship(
@@ -22,7 +24,6 @@ class User(db.Model, LoginUserMixin, RbacUserMixin):
         secondary=users_roles,
         backref=db.backref('users', lazy='dynamic')
     )
-    auth_keys = db.relationship('AuthKey', backref='user', lazy=True)
 
     def add_role(self, role):
         self.roles.append(role)
@@ -34,3 +35,11 @@ class User(db.Model, LoginUserMixin, RbacUserMixin):
     def get_roles(self):
         for role in self.roles:
             yield role
+
+    def gen_auth_key(self):
+        import secrets
+        from datetime import datetime, timedelta
+        self.auth_key = secrets.token_hex(32)
+        self.session_expiry = datetime.now() + timedelta(hours=1) # Set expiration 1 hour from now
+        return self.auth_key
+        

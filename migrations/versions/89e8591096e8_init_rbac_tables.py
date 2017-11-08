@@ -1,8 +1,8 @@
-"""Initializing RBAC tables
+"""Init RBAC tables
 
-Revision ID: 9b7ed275b64b
+Revision ID: 89e8591096e8
 Revises: 
-Create Date: 2017-08-29 07:41:44.892250
+Create Date: 2017-11-02 09:45:18.847047
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9b7ed275b64b'
+revision = '89e8591096e8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=30), nullable=True),
     sa.Column('password', sa.String(length=255), nullable=True),
+    sa.Column('auth_key', sa.String(length=255), nullable=True),
+    sa.Column('session_expiry', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('roles_parents',

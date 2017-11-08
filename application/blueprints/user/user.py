@@ -10,7 +10,7 @@ from ...models import User
 
 node = Blueprint("user", __name__, template_folder="templates")
 
-@node.route("/register", methods=['GET', 'POST'])
+@node.route("/api/register", methods=['GET', 'POST'])
 def register():
     username = request.values.get("username", None)
     password = request.values.get("password", None)
@@ -36,7 +36,7 @@ def register():
 
     return jsonify({"success" : True})
 
-@node.route('/login', methods=['POST'])
+@node.route('/api/login', methods=['GET', 'POST'])
 def login():
     username = request.values.get("username", None)
     password = request.values.get("password", None)
@@ -72,5 +72,11 @@ def login():
             "success" : False,
             "error" : "password_mismatched"
         })
+
+    auth_key = user.gen_auth_key()
+    db.session.commit()
         
-    return jsonify({"success" : True})
+    return jsonify({
+        "success" : True,
+        "auth_key": auth_key
+    })
