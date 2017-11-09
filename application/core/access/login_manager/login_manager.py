@@ -112,9 +112,11 @@ class LoginManager(object):
 
     @property
     def login_user(self):
-        def _user_login_callback(user, remember):
+        def _login_user_callback(user, remember):
             _request_ctx_stack.top.user = user
-            self.login_user_callback(user, remember)
+            _session = self.session
+            _session['user_id'] = user.get_id()
+            _session['remember'] = remember
             return user
         return self._get_callback('_login_user_callback', request.blueprint) or _login_user_callback
 
