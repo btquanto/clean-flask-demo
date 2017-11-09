@@ -10,8 +10,15 @@
 from functools import wraps
 from types import SimpleNamespace as Dummy
 from werkzeug.local import LocalProxy
-from flask import (has_request_context, _request_ctx_stack,
-                    current_app as app, request, session, jsonify)
+from flask import (has_request_context, current_app as app, request, session, jsonify)
+
+# Find the stack on which we want to store the database connection.
+# Starting with Flask 0.9, the _app_ctx_stack is the correct one,
+# before that we need to use the _request_ctx_stack.
+try:
+    from flask import _app_ctx_stack as stack
+except ImportError:
+    from flask import _request_ctx_stack as stack
 
 from .mixins import AnonymousUserMixin
 
@@ -44,12 +51,12 @@ class LoginManager(object):
         return func or getattr(self, name, None)
 
     def _load_current_user(self):
-        if has_request_context() and not hasattr(_request_ctx_stack.top, 'user'):
+        if has_request_context() and not hasattr(stack.top, 'user'):
             user = self.reload_user()
             if user is None:
                 return self.anonymous_user
             return user
-        return getattr(_request_ctx_stack.top, 'user', self.anonymous_user)
+        return getattr(stack.top, 'user', self.anonymous_user)
 
     def _callback(self, callback, blueprint):
 
@@ -110,15 +117,18 @@ class LoginManager(object):
             return self.anonymous_user
         return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
 
-    @property
     def login_user(self):
         def _login_user_callback(user, remember):
-            _request_ctx_stack.top.user = user
+            stack.top.user = user
             _session = self.session
             _session['user_id'] = user.get_id()
             _session['remember'] = remember
             return user
         return self._get_callback('_login_user_callback', request.blueprint) or _login_user_callback
+
+    def logout(self):
+        session.clear()
+        stack.top.user = self.anonymous_user
 
     def login_required(self, func):
         @wraps(func)
