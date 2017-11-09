@@ -20,14 +20,13 @@ class LoginManager(object):
     def __init__(self, app=None, with_session=True):
         self.user = LocalProxy(lambda: self._load_current_user())
         self.blueprints = {}
-        self._with_session = with_session
         self.anonymous_user = AnonymousUserMixin()
 
         if app is not None:
             self.init_app(app, with_session)
 
     def init_app(self, app, with_session=True):
-        pass
+        self._with_session = with_session
 
     def _set_callback(self, name, func, blueprint=None):
         if blueprint:
@@ -82,8 +81,8 @@ class LoginManager(object):
 
     @property
     def session(self):
-        _session = session.get(self.__hash__, {})
-        session[self.__hash__] = _session
+        _session = session.get(self.__hash__(), {})
+        session[self.__hash__()] = _session
         return _session
 
     @property
@@ -103,10 +102,11 @@ class LoginManager(object):
         def _reload_user_callback():
             if self._with_session:
                 _session = self.session
-                user_id = _session['user_id']
-                user = self.load_user(user_id)
-                if user is not None:
-                    return user
+                user_id = _session.get('user_id', None)
+                if user_id is not None:
+                    user = self.load_user(user_id)
+                    if user is not None:
+                        return user
             return self.anonymous_user
         return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
 

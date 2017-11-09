@@ -16,6 +16,9 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 # SQLAlchemy
 db.init_app(app)
 
+# Flask-Session
+session.init_app(app)
+
 # Login Managers
 def user_loader(user_id):
     return User.get(user_id)
@@ -23,10 +26,8 @@ def user_loader(user_id):
 lm.init_app(app)
 lm.user_loader(user_loader)
 
-apilm.init_app(app, with_session=False)
-
-# Flask-Session
-session.init_app(app)
+apilm.init_app(app, with_session=True)
+apilm.user_loader(user_loader)
 
 # RBAC
 rbac.init_app(app)

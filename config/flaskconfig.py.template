@@ -3,7 +3,7 @@ from os.path import abspath, dirname
 
 # Application configuration
 DEBUG = True
-SECRET_KEY = "secret!!!"
+SECRET_KEY = "secret!!!12345"
 BASE_DIR = abspath(dirname(__file__))
 HOST = "0.0.0.0"
 DOMAIN = "localhost"
@@ -12,7 +12,7 @@ PORT = 8000
 JSON_AS_ASCII = False
 
 # Flask-Session
-SESSION_TYPE = None
+SESSION_TYPE = 'filesystem'
 SESSION_PERMANENT = True
 
 # Sql Alchemy
