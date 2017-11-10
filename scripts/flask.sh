@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEBUG=true;
-SKIP_REQUIREMENTS_CHECK=true;
+SKIP_REQUIREMENTS_CHECK=false;
 
 set -e
 
