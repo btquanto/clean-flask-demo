@@ -5,11 +5,8 @@ from application import app, db, lm, apilm, session, rbac, es
 from application.models import User, Role
 from application.core.reverse_proxied import ReverseProxied
 
-# Constants
-CONFIGURATION_FILE = "../config/flaskconfig.py"
-
 # Configuration
-app.config.from_pyfile(CONFIGURATION_FILE, silent=False)
+app.config.from_object("config.flaskconfig")
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 # SQLAlchemy
