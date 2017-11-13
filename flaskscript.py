@@ -1,4 +1,3 @@
-from application import app
 from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
 from flask_alchemydumps import AlchemyDumps, AlchemyDumpsCommand

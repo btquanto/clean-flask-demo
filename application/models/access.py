@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from . import db
+from application import db
 
 class Access(db.Model, LoginUserMixin, RbacUserMixin):
     __tablename__ = 'access'

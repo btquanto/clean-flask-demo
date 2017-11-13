@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_login import UserMixin as LoginUserMixin
-from ..core.access import UserMixin as RbacUserMixin
-from . import db, rbac
+from application.core.access import UserMixin as RbacUserMixin
+from application import db, rbac
 
 users_roles = db.Table(
     'users_roles',
@@ -20,7 +20,7 @@ class User(db.Model, LoginUserMixin, RbacUserMixin):
 
     # Other columns
     roles = db.relationship(
-        'Role', 
+        'Role',
         secondary=users_roles,
         backref=db.backref('users', lazy='dynamic')
     )
@@ -42,4 +42,4 @@ class User(db.Model, LoginUserMixin, RbacUserMixin):
         self.auth_key = secrets.token_hex(32)
         self.session_expiry = datetime.now() + timedelta(hours=1) # Set expiration 1 hour from now
         return self.auth_key
-        
+

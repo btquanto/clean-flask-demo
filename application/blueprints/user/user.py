@@ -5,8 +5,8 @@ from flask import Blueprint, render_template, jsonify, request
 from jinja2 import TemplateNotFound
 from sqlalchemy.orm.exc import MultipleResultsFound
 
-from .. import app, db
-from ...models import User
+from application import db
+from application.models import User
 
 node = Blueprint("user", __name__, template_folder="templates")
 
@@ -46,7 +46,7 @@ def login():
             "success" : False,
             "error" : "missing_params"
         })
-    
+
     try:
         user = User.query.filter_by(username=username).scalar()
     except MultipleResultsFound:
@@ -75,7 +75,7 @@ def login():
 
     auth_key = user.gen_auth_key()
     db.session.commit()
-        
+
     return jsonify({
         "success" : True,
         "auth_key": auth_key

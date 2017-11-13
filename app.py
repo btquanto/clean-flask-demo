@@ -4,7 +4,6 @@ from flask import redirect, url_for
 from application import app, db, lm, apilm, session, rbac, es
 from application.models import User, Role
 from application.core.reverse_proxied import ReverseProxied
-from application.blueprints import home, user
 
 # Constants
 CONFIGURATION_FILE = "../config/flaskconfig.py"
