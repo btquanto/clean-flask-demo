@@ -4,4 +4,5 @@ flaskconfig.py
 scripts/gunicorn_config.py
 logs
 node_modules
-flask_session/*
+flask_session
+assets

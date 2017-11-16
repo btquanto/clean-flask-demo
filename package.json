@@ -1,11 +1,12 @@
 {
-  "name": "flask-elastic",
+  "name": "flask-demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack --progress --colors --watch"
+    "gulp": "gulp",
+    "production": "gulp --production"
   },
   "repository": {
     "type": "git",
@@ -13,7 +14,7 @@
   },
   "keywords": [
     "flask",
-    "elastic"
+    "demo"
   ],
   "author": "Quan To <btquanto@gmail.com>",
   "license": "ISC",
@@ -23,21 +24,32 @@
   "homepage": "https://github.com/btquanto/clean-flask-demo#readme",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "classnames": "^2.2.5",
     "fontawesome": "^4.7.2",
     "jquery": "^3.2.1",
-    "rxjs": "^5.4.3"
+    "react": "^16.1.0",
+    "react-dom": "^16.1.0",
+    "rxjs": "^5.4.3",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.1",
+    "babel-loader": "7.1.1",
     "babel-preset-es2015": "^6.24.1",
-    "css-loader": "^0.28.4",
-    "file-loader": "^0.11.2",
-    "sass-loader": "^6.0.6",
-    "style-loader": "^0.18.2",
-    "svg-loader": "0.0.2",
-    "url-loader": "^0.5.9",
-    "webpack": "^3.5.3"
+    "babel-preset-react": "^6.24.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-clean-css": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-sass-import": "^1.0.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-webpack": "^1.5.0",
+    "merge-stream": "^1.0.1",
+    "pump": "^1.0.2",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^3.8.1",
+    "yargs": "^10.0.3"
   }
 }

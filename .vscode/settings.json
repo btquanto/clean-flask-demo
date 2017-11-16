@@ -1,6 +1,7 @@
 {
     "files.exclude": {
         "**/.git": true,
+        "**/.env": true,
         "**/.svn": true,
         "**/.hg": true,
         "**/CVS": true,
@@ -9,7 +10,9 @@
         "**/__pycache__": true,
         "node_modules" : true,
         "logs" : true,
-        "package-lock.json": true
+        "package-lock.json": true,
+        "flask_session": true,
+        "assets": true
     },
     "files.trimTrailingWhitespace": true
 }

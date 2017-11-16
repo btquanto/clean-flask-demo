@@ -7,3 +7,8 @@ node = Blueprint("home", __name__, template_folder="templates")
 @node.route("/index")
 def index():
     return render_template("home/index.html")
+
+
+@node.route("/register")
+def register():
+    return render_template("home/register.html")
