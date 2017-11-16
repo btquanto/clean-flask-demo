@@ -5,6 +5,7 @@ from app import db, lm, apilm, session, rbac, es
 from app.blueprints import user, home
 from app.models import User, Role
 from core.reverse_proxied import ReverseProxied
+from application.blueprints import home, user, pennytrail
 
 # Configuration
 app = Flask(__name__)
@@ -39,6 +40,7 @@ es.init_app(app)
 
 app.register_blueprint(home.node, url_prefix="/home")
 app.register_blueprint(user.node, url_prefix="/user")
+app.register_blueprint(pennytrail.node, url_prefix="/pennytrail")
 
 # Default route
 @app.route('/')
