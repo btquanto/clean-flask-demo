@@ -3,7 +3,8 @@ from flask import redirect, url_for
 
 from application import app, db, lm, apilm, session, rbac, es
 from application.models import User, Role
-from application.core.reverse_proxied import ReverseProxied
+from core.reverse_proxied import ReverseProxied
+from application.blueprints import user, home
 
 # Configuration
 app.config.from_object("config.flaskconfig")
