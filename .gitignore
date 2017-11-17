@@ -5,5 +5,5 @@ scripts/gunicorn_config.py
 logs
 node_modules
 flask_session
-assets
+static/assets
 docker-compose.yml

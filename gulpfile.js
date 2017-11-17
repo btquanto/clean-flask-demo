@@ -23,13 +23,15 @@ var JS_SOURCES = {
     ]
 }
 
+var BUILD_FOLDER = 'static/assets';
+
 var isProduction = (argv.production === undefined) ? false : true;
 
 function compileSCSS() {
     SCSS_SOURCES.map(
         function (blueprint) {
-            let source = `./application/blueprints/${blueprint}/static/${blueprint}/scss/*.scss`
-            let destination = `./assets/${blueprint}/css/`;
+            let source = `./app/blueprints/${blueprint}/static/${blueprint}/scss/*.scss`
+            let destination = `${BUILD_FOLDER}/${blueprint}/css/`;
 
             let pipes = [
                 gulp.src(source),
@@ -58,10 +60,10 @@ function compileJS() {
         return JS_SOURCES[blueprint].map(
             function (action) {
                 let sources = [
-                    `./application/blueprints/${blueprint}/static/${blueprint}/js/${action}.js`,
-                    `./application/blueprints/${blueprint}/static/${blueprint}/js/${action}.jsx`
+                    `./app/blueprints/${blueprint}/static/${blueprint}/js/${action}.js`,
+                    `./app/blueprints/${blueprint}/static/${blueprint}/js/${action}.jsx`
                 ]
-                let destination = `./assets/${blueprint}/js/`;
+                let destination = `${BUILD_FOLDER}/${blueprint}/js/`;
 
                 let pipes = [
                     gulp.src(sources),
@@ -128,15 +130,15 @@ function compileJS() {
 function watch() {
     SCSS_SOURCES.map(
         function (blueprint) {
-            let source = `./application/blueprints/${blueprint}/static/${blueprint}/scss/*.scss`
-            let destination = `./assets/${blueprint}/css/`;
+            let source = `./app/blueprints/${blueprint}/static/${blueprint}/scss/*.scss`
+            let destination = `${BUILD_FOLDER}/${blueprint}/css/`;
             return gulp.watch(source, ['compile_scss'])
         }
     );
     Object.keys(JS_SOURCES).map(function (blueprint) {
         let sources = [
-            `./application/blueprints/${blueprint}/static/${blueprint}/js/*.js`,
-            `./application/blueprints/${blueprint}/static/${blueprint}/js/*.jsx`
+            `./app/blueprints/${blueprint}/static/${blueprint}/js/*.js`,
+            `./app/blueprints/${blueprint}/static/${blueprint}/js/*.jsx`
         ]
         return gulp.watch(sources, ['compile_js'])
     });

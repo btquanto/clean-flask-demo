@@ -1,18 +1,18 @@
 {
     "files.exclude": {
-        "**/.git": true,
-        "**/.env": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/.vscode": true,
         "**/__pycache__": true,
-        "node_modules" : true,
-        "logs" : true,
-        "package-lock.json": true,
+        "**/.DS_Store": true,
+        "**/.env": true,
+        "**/.git": true,
+        "**/.hg": true,
+        "**/.svn": true,
+        "**/.vscode": true,
+        "**/CVS": true,
         "flask_session": true,
-        "assets": true
+        "logs" : true,
+        "node_modules" : true,
+        "package-lock.json": true,
+        "static/assets": true
     },
     "files.trimTrailingWhitespace": true
 }
