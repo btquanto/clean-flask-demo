@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_login import UserMixin as LoginUserMixin
 from core.access import UserMixin as RbacUserMixin
-from application import db, rbac
+from app import db, rbac
 
 users_roles = db.Table(
     'users_roles',

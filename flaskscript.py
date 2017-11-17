@@ -2,8 +2,8 @@ from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
 from flask_alchemydumps import AlchemyDumps, AlchemyDumpsCommand
 
-from app import app, db
-from application.models import *
+from application import app, db
+from app.models import *
 
 migrate = Migrate(app, db)
 alchemy_dumps = AlchemyDumps(app, db)

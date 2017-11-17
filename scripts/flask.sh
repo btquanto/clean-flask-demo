@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEBUG=true;
+DEBUG=false;
 SKIP_REQUIREMENTS_CHECK=false;
 
 set -e
@@ -24,12 +24,12 @@ then
 fi;
 if $DEBUG
 then
-    python3 app.py
+    python3 application.py
 else
     if [ "uwsgi_config.ini" ]
     then
         exec uwsgi --ini uwsgi_config.ini --logto ./logs/uwsgi.log
     else
-        exec uwsgi --socket 0.0.0.0:8000 -w app:app
+        exec uwsgi --socket 0.0.0.0:8000 -w application:app
     fi;
 fi;

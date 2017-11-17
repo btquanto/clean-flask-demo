@@ -5,8 +5,8 @@ from flask import Blueprint, render_template, jsonify, request
 from jinja2 import TemplateNotFound
 from sqlalchemy.orm.exc import MultipleResultsFound
 
-from application import db
-from application.models import User
+from app import db
+from app.models import User
 
 node = Blueprint("user", __name__, template_folder="templates")
 

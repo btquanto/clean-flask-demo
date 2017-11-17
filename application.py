@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from flask import redirect, url_for
+from flask import Flask, redirect, url_for, send_from_directory
 
-from application import app, db, lm, apilm, session, rbac, es
-from application.models import User, Role
+from app import db, lm, apilm, session, rbac, es
+from app.blueprints import user, home
+from app.models import User, Role
 from core.reverse_proxied import ReverseProxied
-from application.blueprints import user, home
 
 # Configuration
+app = Flask(__name__)
 app.config.from_object("config.flaskconfig")
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
@@ -35,6 +36,7 @@ rbac.user_model(User)
 es.init_app(app)
 
 # Register blueprints
+
 app.register_blueprint(home.node, url_prefix="/home")
 app.register_blueprint(user.node, url_prefix="/user")
 
@@ -44,4 +46,6 @@ def bootstrap():
     return redirect('/home/index')
 
 if __name__ == '__main__':
-    app.run(host=app.config['HOST'], port=app.config['PORT'], debug=True)
+    app.run(host=app.config['HOST'],
+            port=app.config['PORT'],
+            debug=True)
