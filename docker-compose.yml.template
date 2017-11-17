@@ -13,6 +13,8 @@ services:
       - UWSGI_CONFIG_FILE=uwsgi_config.ini
     links:
       - postgres
+    ports:
+      - 8000:8000
     volumes:
       - type: bind
         source: ./
@@ -22,7 +24,6 @@ services:
     image: nginx:1.13.0-alpine
     ports:
       - 8080:8080
-      - 8088:8088
     links:
       - flask
     depends_on:
