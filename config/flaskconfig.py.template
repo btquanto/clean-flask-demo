@@ -8,6 +8,7 @@ BASE_DIR = abspath(dirname(__file__))
 HOST = "0.0.0.0"
 DOMAIN = "localhost"
 PORT = 8000
+GOOGLE_DEVELOPER_KEY = "12345!!!secret"
 
 JSON_AS_ASCII = False
 

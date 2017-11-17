@@ -4,9 +4,9 @@ services:
   postgres:
     image: postgres:9.6.1-alpine
     environment:
-      - POSTGRES_USER=cashtrail
-      - POSTGRES_DB=cashtrail
-      - POSTGRES_PASSWORD=cashtrailpassword
+      - POSTGRES_USER=flask-skeleton
+      - POSTGRES_DB=flask-skeleton
+      - POSTGRES_PASSWORD=mysecretpassword
   flask:
     image: btquanto/docker-flask-py3:latest
     environment:

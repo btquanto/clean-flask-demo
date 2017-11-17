@@ -6,3 +6,4 @@ logs
 node_modules
 flask_session
 assets
+docker-compose.yml
