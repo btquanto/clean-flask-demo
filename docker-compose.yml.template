@@ -10,7 +10,7 @@ services:
   flask:
     image: btquanto/docker-flask-py3:latest
     environment:
-      - UWSGI_CONFIG_FILE=uwsgi_config.ini
+      - UWSGI_CONFIG_FILE=config/uwsgi_config.ini
     links:
       - postgres
     ports:
@@ -25,8 +25,6 @@ services:
     ports:
       - 8080:8080
     links:
-      - flask
-    depends_on:
       - flask
     volumes:
       - ./:/src:ro

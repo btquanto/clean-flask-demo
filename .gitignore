@@ -1,9 +1,7 @@
 .env/*
 *.pyc
-flaskconfig.py
-scripts/gunicorn_config.py
-logs
-node_modules
-flask_session
-static/assets
+config/flaskconfig.py
 docker-compose.yml
+flask_session
+node_modules
+static/assets

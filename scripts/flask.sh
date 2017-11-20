@@ -26,9 +26,9 @@ if $DEBUG
 then
     python3 application.py
 else
-    if [ "uwsgi_config.ini" ]
+    if [ -f config/uwsgi_config.ini ]
     then
-        exec uwsgi --ini uwsgi_config.ini --logto ./logs/uwsgi.log
+        exec uwsgi --ini config/uwsgi_config.ini --logto ./logs/uwsgi.log
     else
         exec uwsgi --socket 0.0.0.0:8000 -w application:app
     fi;
