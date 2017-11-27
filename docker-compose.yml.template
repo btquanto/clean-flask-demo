@@ -28,6 +28,7 @@ services:
       - flask
     volumes:
       - ./:/src:ro
-      - ./scripts/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+      - ./scripts/ssl:/etc/nginx/ssl:ro
+      - ./scripts/nginx.secure.conf:/etc/nginx/conf.d/nginx.conf:ro
 
     command: ["nginx", "-g", "daemon off;"]
