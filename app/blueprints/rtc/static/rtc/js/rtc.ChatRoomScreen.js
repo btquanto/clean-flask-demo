@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { combineReducers, createStore } from 'redux';
 import { connect } from 'react-redux';
-import LoginScreen from './LoginScreen';
+
+import Popup from 'react-popup';
+
 import WebCamPlayer from 'Components/WebCamPlayer';
 import VideoPlayer from 'Components/VideoPlayer';
 import ChatBox from 'Components/ChatBox';
 import UserList from 'Components/UserList';
 import PeerManager from 'Components/PeerManager';
-import Popup from 'react-popup';
 
 class ChatRoomScreen extends Component {
     constructor(props) {
