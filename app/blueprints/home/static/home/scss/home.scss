@@ -1,0 +1,23 @@
+@import '_input';
+@import '_bootstrap-form';
+#root {
+    height: 100vh;
+    background: #f2f2f2;
+    #home-app {
+        height: 100%;
+        .login {
+            height: 100%;
+            .bootstrap-form.form {
+                position: relative;
+                top: -20%;
+            }
+        }
+        .register {
+            height: 100%;
+            .bootstrap-form.form {
+                position: relative;
+                top: -5%;
+            }
+        }
+    }
+}

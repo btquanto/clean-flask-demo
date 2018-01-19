@@ -9,9 +9,8 @@ const path = require('path');
 const pump = require('pump');
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
-const uglify = require('gulp-uglify');
-const webpack = require('gulp-webpack');
-const argv = require('yargs').argv;
+const wpStream = require('webpack-stream');
+const webpack = require('webpack');
 
 const SCSS_SOURCES = [
     'home',
@@ -29,9 +28,8 @@ const JS_SOURCES = {
 
 const BUILD_FOLDER = 'static/assets';
 
-const isProduction = (argv.production === undefined) ? false : true;
-
 function compileSCSS() {
+
     SCSS_SOURCES.map(
         function (blueprint) {
             let source = `./app/blueprints/${blueprint}/static/${blueprint}/scss/*.scss`
@@ -48,12 +46,11 @@ function compileSCSS() {
                 rename({
                     suffix: '.min'
                 }),
+                ...(process.env.NODE_ENV === 'production'
+                    ? [pipes.splice(pipes.length - 2, 0, minifyCSS())]
+                    : []),
                 gulp.dest(destination)
             ];
-
-            if (isProduction) {
-                pipes.splice(pipes.length - 2, 0, minifyCSS());
-            }
 
             return pump(pipes);
         }
@@ -71,62 +68,46 @@ function compileJS() {
 
             let destination = `${BUILD_FOLDER}/${blueprint}/js/`;
 
+            let wpConfig = {
+                plugins: [
+                    new webpack.DefinePlugin({
+                        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+                    }),
+                    ...(process.env.NODE_ENV === 'production' ? [new webpack.optimize.UglifyJsPlugin()] : [])
+                ],
+                module: {
+                    loaders: [{
+                        test: /\.(js|jsx)$/,
+                        loader: 'babel-loader',
+                        exclude: /node_modules/,
+                        query: {
+                            presets: ['es2015', 'react', 'stage-0'],
+                            compact: false,
+                            plugins: ["transform-object-rest-spread"],
+                            cacheDirectory: true,
+                        },
+                    }]
+                },
+                resolve: {
+                    modules: ['./node_modules'],
+                    alias: {
+                        Components: path.resolve(__dirname, "components/js")
+                    }
+                },
+                stats: {
+                    colors: true
+                }
+            };
+
             let pipes = [
                 gulp.src(sources),
                 named(),
-                webpack({
-                    module: {
-                        loaders: [{
-                            test: /\.(js|jsx)$/,
-                            loader: 'babel-loader',
-                            query: {
-                                presets: ['es2015', 'react', 'stage-3'],
-                                compact: false,
-                                plugins: ["transform-object-rest-spread"],
-                                cacheDirectory: true
-                            }
-                        },
-                        {
-                            test: /\.css$/,
-                            loader: "style-loader!css-loader"
-                        },
-                        {
-                            test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                            loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-                        },
-                        {
-                            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                            loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
-                        },
-                        {
-                            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                            loader: 'file-loader'
-                        },
-                        {
-                            test: /\.svg$/,
-                            loader: 'svg-loader'
-                        }
-                        ]
-                    },
-                    resolve: {
-                        modules: ['./node_modules'],
-                        alias: {
-                            Components: path.resolve(__dirname, "components/js")
-                        }
-                    },
-                    stats: {
-                        colors: true
-                    }
-                }),
+                wpStream(wpConfig, webpack),
                 rename({
                     suffix: '.min'
                 }),
                 gulp.dest(destination)
             ];
-
-            if (isProduction) {
-                pipes.splice(pipes.length - 2, 0, uglify());
-            }
 
             pump(pipes);
         })
@@ -150,11 +131,15 @@ function watch() {
     });
 
     let components_sources = [
-        './components/js/*.js',
-        './components/js/*.jsx',
+        './components/js/*.js'
+    ];
+
+    let components_scss_sources = [
+        './components/scss/*.scss'
     ];
 
     gulp.watch(components_sources, ['compile_js'])
+    gulp.watch(components_scss_sources, ['compile_scss'])
 }
 
 gulp.task('compile_scss', compileSCSS);

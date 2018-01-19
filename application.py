@@ -3,7 +3,7 @@
 # from gevent import monkey
 import eventlet, logging
 from flask import Flask, redirect, url_for, send_from_directory
-from app import db, lm, apilm, session, rbac, es, socketio
+from app import db, lm, session, rbac, es, socketio
 from app.blueprints import user, home, rtc
 from app.models import User, Role
 from core.reverse_proxied import ReverseProxied
@@ -27,13 +27,10 @@ session.init_app(app)
 
 # Login Managers
 def user_loader(user_id):
-    return User.get(user_id)
+    return User.query.filter_by(id=user_id).scalar()
 
-lm.init_app(app)
+lm.init_app(app, with_session=True)
 lm.user_loader(user_loader)
-
-apilm.init_app(app, with_session=True)
-apilm.user_loader(user_loader)
 
 # RBAC
 rbac.init_app(app)

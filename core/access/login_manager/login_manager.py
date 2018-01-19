@@ -47,7 +47,6 @@ class LoginManager(object):
         if blueprint:
             _blueprint = self.blueprints.get(blueprint, None)
             func = getattr(_blueprint, name, None)
-            app.logger.info(func)
         return func or getattr(self, name, None)
 
     def _load_current_user(self):
@@ -117,6 +116,7 @@ class LoginManager(object):
             return self.anonymous_user
         return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
 
+    @property
     def login_user(self):
         def _login_user_callback(user, remember):
             stack.top.user = user

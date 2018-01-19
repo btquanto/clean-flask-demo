@@ -6,11 +6,6 @@ from flask_socketio import join_room, leave_room, emit, close_room
 
 node = Blueprint("home", __name__, template_folder="templates")
 
-@node.route("/index")
+@node.route("/")
 def index():
     return render_template("home/index.html")
-
-
-@node.route("/register")
-def register():
-    return render_template("home/register.html")
