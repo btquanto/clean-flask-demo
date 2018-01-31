@@ -2,11 +2,28 @@
 '''
     .access.login_manager
     -------------------------
-    The LoginManager class
-    Inspired from the plugin Flask-Login, added with a few customizations
-    Allows Flask to have multiple instances of LoginManager
-    Needs more works in order to be more secured
+    The JWTManager class
+
+    JWT Flow
+
+    * Login:
+
+    1. Client: POST /login { username, password }
+    2. Server: user = User.query.filter(username=username)
+    3. Server: user.validate(password)
+    4. Server: auth_key = user.gen_auth_key()
+    5. Server: return jwt_token = jwt.encode(auth_key, secret)
+    6. Client: localStorage["jwt_token"] = jwt_token
+
+    * Authenticate:
+
+    1. Client: POST /api/do_something -H Authorization: Bearer localStorage["jwt_token"]
+    2. Server: auth_key = jwt.decode(jwt_token, secret)
+    3. Server: user = User.query.filter(auth_key=auth_key)
+    4. Server: return do_something() if user else 403
+
 '''
+import jwt
 from functools import wraps
 from types import SimpleNamespace as Dummy
 from werkzeug.local import LocalProxy
@@ -22,19 +39,20 @@ except ImportError:
 
 from .mixins import AnonymousUserMixin
 
-class LoginManager(object):
+class JWTManager(object):
 
-    def __init__(self, app=None, with_session=True):
+    def __init__(self, app=None):
         self.user = LocalProxy(lambda: self._load_current_user())
         self.blueprints = {}
         self.anonymous_user = AnonymousUserMixin()
 
         if app is not None:
-            self.init_app(app, with_session)
+            self.init_app(app)
 
-    def init_app(self, app, with_session=True):
+    def init_app(self, app):
         self._secret_key = app.config['SECRET_KEY']
-        self._with_session = with_session
+        self._auth_prefix = app.config.get('JWT_AUTH_HEADER_PREFIX') or 'Bearer'
+        self._auth_algorithm = app.config.get('JWT_ALGORITHM') or 'HS256'
 
     def _set_callback(self, name, func, blueprint=None):
         if blueprint:
@@ -51,15 +69,12 @@ class LoginManager(object):
         return func or getattr(self, name, None)
 
     def _load_current_user(self):
-        if has_request_context() and not hasattr(stack.top, 'user'):
-            user = self.reload_user()
-            if user is None:
-                return self.anonymous_user
-            return user
-        return getattr(stack.top, 'user', self.anonymous_user)
+        user = self.reload_user()
+        if user is None:
+            return self.anonymous_user
+        return user
 
     def _callback(self, callback, blueprint):
-
         def decorator(func):
             @wraps
             def wrapper(*args, **kwargs):
@@ -87,12 +102,6 @@ class LoginManager(object):
         return self._callback("_user_loader", blueprint)
 
     @property
-    def session(self):
-        _session = session.get(self.__hash__(), {})
-        session[self.__hash__()] = _session
-        return _session
-
-    @property
     def unauthorized(self):
         def _unauthorize_callback():
             return jsonify({
@@ -107,31 +116,29 @@ class LoginManager(object):
     @property
     def reload_user(self):
         def _reload_user_callback():
-            if self._with_session:
-                _session = self.session
-                user_id = _session.get('user_id', None)
-                if user_id is not None:
-                    user = self.load_user(user_id)
-                    if user is not None:
-                        return user
+            auth_header = request.headers.get('Authorization', None)
+            if auth_header:
+                prefix, jwt_token = auth_header.split()
+                if prefix is self._auth_prefix and jwt_token:
+                    try:
+                        payload = jwt.decode(jwt_token, self._secret_key, algorithms=[self._auth_algorithm])
+                        user = self.load_user(payload)
+                        if user is not None:
+                            return user
+                    except jwt.InvalidTokenError:
+                        pass
+
             return self.anonymous_user
+
         return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
 
-    @property
-    def login_user(self):
-        def _login_user_callback(user, remember):
-            stack.top.user = user
-            _session = self.session
-            _session['user_id'] = user.get_id()
-            _session['remember'] = remember
-            return user
-        return self._get_callback('_login_user_callback', request.blueprint) or _login_user_callback
+    def generate_token(self, user):
+        def _token_generator(user):
+            auth_key = user.auth_key
+            return jwt.encode({ "auth_key" : auth_key }, self._secret_key, algorithms=[self._auth_algorithm])
+        pass
 
-    def logout(self):
-        session.clear()
-        stack.top.user = self.anonymous_user
-
-    def login_required(self, func):
+    def jwt_required(self, func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if self.user.is_authenticated:

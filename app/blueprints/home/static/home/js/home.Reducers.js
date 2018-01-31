@@ -5,7 +5,6 @@ function appReducer(state = {
     isLoggedIn: false,
     authKey: null
 }, action) {
-    console.log(action.type)
     switch (action.type) {
         case 'USER_REGISTERED':
             return Object.assign({}, state, {

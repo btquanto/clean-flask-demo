@@ -6,6 +6,7 @@ import { push } from 'react-router-redux'
 import axios from 'axios'
 import FormData from 'form-data'
 
+import { Link } from 'react-router-dom'
 import { Form, Field, Validator, SubmitButton } from 'Components/BootstrapForm'
 
 class Login extends Component {
@@ -50,17 +51,21 @@ class Login extends Component {
                             errorMessage="Password is required"
                             validator={'required'} />
                     </Field>
-                    <SubmitButton
-                        className="btn-primary align-self-end"
-                        title="Login"
-                        onSubmit={isFormValid => {
-                            if (isFormValid) {
-                                this.props.submitForm({
-                                    username: this.state.username,
-                                    password: this.state.password
-                                })
-                            }
-                        }} />
+                    <div className="d-flex flex-row align-items-center justify-content-start">
+                        <Link to="/register"
+                            replace>Don't have an account yet?</Link>
+                        <SubmitButton
+                            className="btn-primary ml-auto"
+                            title="Login"
+                            onSubmit={isFormValid => {
+                                if (isFormValid) {
+                                    this.props.submitForm({
+                                        username: this.state.username,
+                                        password: this.state.password
+                                    })
+                                }
+                            }} />
+                    </div>
                 </Form>
             </div>
         )

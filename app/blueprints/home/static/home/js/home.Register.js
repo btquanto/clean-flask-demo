@@ -117,5 +117,6 @@ export default connect((state, props) => ({
                 type: 'USER_REGISTERED',
                 response: response.data
             }))
+            .then(() => dispatch(push('/login')))
     }
 }))(Register)

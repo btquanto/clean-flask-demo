@@ -10,23 +10,25 @@ from app.models import User
 
 node = Blueprint("user", __name__, template_folder="templates")
 
-def handle_register():
+
+@node.route("/api/register", methods=['GET', 'POST'])
+def api_register():
     fullname = request.values.get("fullname", None)
     username = request.values.get("username", None)
     email = request.values.get("email", None)
     password = request.values.get("password", None)
 
     if not [param for param in [fullname, username, email, password] if param]:
-        return {
+        return jsonify({
             "success" : False,
             "error" : "missing_params"
-        }
+        })
 
     if User.query.filter_by(username=username).first() is not None:
-        return {
+        return jsonify({
             "success" : False,
             "error" : "user_already_existed"
-        }
+        })
 
     user = User()
     user.fullname = fullname
@@ -37,7 +39,8 @@ def handle_register():
     db.session.add(user)
     db.session.commit()
 
-    return {"success" : True}
+    return jsonify({"success" : True})
+
 
 def handle_login():
     username = request.values.get("username", None)
@@ -83,28 +86,12 @@ def handle_login():
         "auth_key": auth_key
     }, user
 
-def handle_refresh_token():
-    user = lm.user
-    auth_key = user.refresh_token()
-    if auth_key:
-        return {
-            "success" : True,
-            "auth_key": auth_key
-        }
-
-    return {
-        "success": False,
-        "error": "Failed to refresh token"
-    }
-
-@node.route("/api/register", methods=['GET', 'POST'])
-def api_register():
-    return jsonify(handle_register())
 
 @node.route('/api/login', methods=['GET', 'POST'])
 def api_login():
     response, user = handle_login()
     return jsonify(response)
+
 
 @node.route('/login', methods=['GET', 'POST'])
 def login():
@@ -115,7 +102,25 @@ def login():
 
     return jsonify(response)
 
+
+@node.route('/logout', methods=['GET', 'POST'])
+def logout():
+    lm.logout()
+    return jsonify({ "success" : True })
+
+
 @node.route('/api/refresh_token', methods=['GET', 'POST'])
 @lm.login_required
 def refresh_token():
-    return jsonify(handle_refresh_token())
+    user = lm.user
+    auth_key = user.refresh_token()
+    if auth_key:
+        return jsonify({
+            "success" : True,
+            "auth_key": auth_key
+        })
+
+    return jsonify({
+        "success": False,
+        "error": "Failed to refresh token"
+    })
