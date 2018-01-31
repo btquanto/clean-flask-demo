@@ -12,7 +12,7 @@ from types import SimpleNamespace as Dummy
 from werkzeug.local import LocalProxy
 from flask import (has_request_context, current_app as app, request, session, jsonify)
 
-# Find the stack on which we want to store the database connection.
+# Find the stack on which we want to store the user
 # Starting with Flask 0.9, the _app_ctx_stack is the correct one,
 # before that we need to use the _request_ctx_stack.
 try:
@@ -113,6 +113,7 @@ class LoginManager(object):
                 if user_id is not None:
                     user = self.load_user(user_id)
                     if user is not None:
+                        stack.top.user = user
                         return user
             return self.anonymous_user
         return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
