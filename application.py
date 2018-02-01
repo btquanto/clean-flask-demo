@@ -4,7 +4,7 @@
 import eventlet, logging
 from flask import Flask, redirect, url_for, send_from_directory
 from app import db, lm, session, rbac, es, socketio
-from app.blueprints import user, home, rtc
+from app.blueprints import user, home, rtc, admin, api
 from app.models import User, Role
 from core.reverse_proxied import ReverseProxied
 
@@ -41,6 +41,8 @@ rbac.user_model(User)
 es.init_app(app)
 
 # Register blueprints
+app.register_blueprint(admin.node, url_prefix="/admin")
+app.register_blueprint(api.node, url_prefix="/api")
 app.register_blueprint(home.node, url_prefix="/home")
 app.register_blueprint(user.node, url_prefix="/user")
 app.register_blueprint(rtc.node, url_prefix="/rtc")
@@ -53,7 +55,7 @@ app.logger.setLevel(logging.INFO)
 # Default route
 @app.route('/')
 def bootstrap():
-    return redirect('/rtc/')
+    return redirect('/home/')
 
 @app.route('/nodes/<path:filename>')
 def nodes_static(filename):

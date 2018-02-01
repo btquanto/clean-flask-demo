@@ -12,8 +12,11 @@ const wpStream = require('webpack-stream')
 const webpack = require('webpack')
 
 const SOURCES = {
+    'admin': [
+        'admin'
+    ],
     'home': [
-        'home',
+        'home'
     ],
     'rtc': [
         'rtc'
