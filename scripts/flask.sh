@@ -1,6 +1,6 @@
 #!/bin/bash
 DEBUG=false;
-SKIP_REQUIREMENTS_CHECK=true;
+SKIP_REQUIREMENTS_CHECK=false;
 
 set -e
 

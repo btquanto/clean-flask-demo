@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 import axios from 'axios'
 import FormData from 'form-data'
