@@ -3,7 +3,7 @@
 # from gevent import monkey
 import eventlet, logging
 from flask import Flask, redirect, url_for, send_from_directory
-from app import db, lm, session, rbac, es, socketio
+from app import db, lm, jwtm, session, rbac, es, socketio
 from app.blueprints import user, home, rtc, admin, api
 from app.models import User, Role
 from core.reverse_proxied import ReverseProxied
@@ -31,6 +31,15 @@ def user_loader(user_id):
 
 lm.init_app(app, with_session=True)
 lm.user_loader(user_loader)
+
+# JWT Manager
+def jwt_user_loader(payload):
+    auth_key = payload["auth_key"]
+    user = User.query.filter_by(auth_key=auth_key).scalar()
+    return user if user and not user.is_token_expired() else None
+
+jwtm.init_app(app)
+jwtm.user_loader(jwt_user_loader)
 
 # RBAC
 rbac.init_app(app)

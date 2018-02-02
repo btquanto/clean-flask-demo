@@ -42,7 +42,7 @@ from .mixins import AnonymousUserMixin
 class JWTManager(object):
 
     def __init__(self, app=None):
-        self.user = LocalProxy(lambda: self._load_current_user())
+        self.user = lambda: LocalProxy(lambda: self._load_current_user())._get_current_object()
         self.blueprints = {}
         self.anonymous_user = AnonymousUserMixin()
 
@@ -69,10 +69,12 @@ class JWTManager(object):
         return func or getattr(self, name, None)
 
     def _load_current_user(self):
-        user = self.reload_user()
-        if user is None:
-            return self.anonymous_user
-        return user
+        if has_request_context() and not hasattr(stack.top, 'user'):
+            user = self.reload_user()
+            if user is None:
+                return self.anonymous_user
+            return user
+        return getattr(stack.top, 'user', self.anonymous_user)
 
     def _callback(self, callback, blueprint):
         def decorator(func):
@@ -119,24 +121,23 @@ class JWTManager(object):
             auth_header = request.headers.get('Authorization', None)
             if auth_header:
                 prefix, jwt_token = auth_header.split()
-                if prefix is self._auth_prefix and jwt_token:
+                if prefix == self._auth_prefix and jwt_token is not None:
                     try:
                         payload = jwt.decode(jwt_token, self._secret_key, algorithms=[self._auth_algorithm])
                         user = self.load_user(payload)
                         if user is not None:
+                            stack.top.user = user
                             return user
                     except jwt.InvalidTokenError:
+                        app.logger.info("Invalid token error")
                         pass
 
             return self.anonymous_user
 
         return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
 
-    def generate_token(self, user):
-        def _token_generator(user):
-            auth_key = user.auth_key
-            return jwt.encode({ "auth_key" : auth_key }, self._secret_key, algorithms=[self._auth_algorithm])
-        pass
+    def generate_token(self, payload):
+        return jwt.encode(payload, self._secret_key, algorithm=self._auth_algorithm)
 
     def jwt_required(self, func):
         @wraps(func)
