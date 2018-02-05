@@ -2,18 +2,19 @@
 from os.path import abspath, dirname
 
 # Application configuration
-DEBUG = True
-SECRET_KEY = "secret!!!12345"
-BASE_DIR = abspath(dirname(__file__))
-HOST = "0.0.0.0"
+DEBUG = False
+SECRET_KEY = "secret"
+HOST = "127.0.0.1"
 DOMAIN = "localhost"
 PORT = 8000
-GOOGLE_DEVELOPER_KEY = "12345!!!secret"
+
+# Google APIs
+GOOGLE_DEVELOPER_KEY = ""
 
 JSON_AS_ASCII = False
 
 # Flask-Session
-SESSION_TYPE = 'filesystem'
+SESSION_TYPE = "filesystem"
 SESSION_PERMANENT = True
 
 # Sql Alchemy
@@ -29,3 +30,9 @@ SQLALCHEMY_POOL_TIMEOUT = -1
 
 # Role-based access control
 RBAC_DENY_ALL_BY_DEFAULT = False
+
+# JWT Configuration
+REFRESH_TOKEN_EXPIRATION = 24 # hours
+JWT_EXPIRATION = 3600 # seconds
+JWT_AUTH_HEADER_PREFIX = "Bearer"
+JWT_ALGORITHM = "HS256"

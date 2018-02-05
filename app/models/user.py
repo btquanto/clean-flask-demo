@@ -7,27 +7,26 @@ from core.access import UserMixin as RbacUserMixin
 from app import db, rbac
 
 users_roles = db.Table(
-    'users_roles',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('role_id', db.Integer, db.ForeignKey('roles.id'))
+    "users_roles",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
+    db.Column("role_id", db.Integer, db.ForeignKey("roles.id"))
 )
 
 class User(db.Model, LoginUserMixin, RbacUserMixin):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String(255))
     username = db.Column(db.String(255))
     email = db.Column(db.String(255))
     password = db.Column(db.String(255))
-    auth_key = db.Column(db.String(255))
-    session_expiry = db.Column(db.DateTime, nullable=True)
 
     # Other columns
     roles = db.relationship(
-        'Role',
+        "Role",
         secondary=users_roles,
-        backref=db.backref('users', lazy='dynamic')
+        backref=db.backref("users", lazy="dynamic"),
+        lazy="dynamic"
     )
 
     def add_role(self, role):
@@ -41,20 +40,45 @@ class User(db.Model, LoginUserMixin, RbacUserMixin):
         for role in self.roles:
             yield role
 
-    def gen_auth_key(self):
-        self.auth_key = secrets.token_hex(32)
-        self.session_expiry = datetime.now() + timedelta(hours=1) # Set expiration 1 hour from now
-        return self.auth_key
+    def generate_token(self, expiration):
+        from app.models import JWTToken
 
-    def is_token_expired(self):
-        if self.auth_key and self.session_expiry:
-            return datetime.now() > self.session_expiry
-        return True
+        # Clean up certain tokens
+        JWTToken.query.filter(
+            JWTToken.user_id == self.id,
+            JWTToken.expiration >= (datetime.now() + timedelta(hours=app.config["REFRESH_TOKEN_EXPIRATION"]))
+        ).delete()
 
-    def refresh_token(self):
-        if not self.is_token_expired():
-            self.session_expiry = datetime.now() + timedelta(hours=1) # Set expiration 1 hour from now
-            return self.auth_key
+        jwt_token = JWTToken()
+        jwt_token.user_id = self.id
+        token, refresh_token = jwt_token.generate_token(expiration)
+
+        return token, refresh_token
+
+    def validate_token(self, token):
+        from app.models import JWTToken
+
+        # Find the jwt token
+        jwt_token = JWTToken.query.filter(token=token).scalar()
+
+        if jwt_token:
+            return jwt_token.validate_token()
+
+        return False
+
+    def refresh_token(self, refresh_token, expiration):
+        from app.models import JWTToken
+
+        # Clean up certain tokens
+        JWTToken.query.filter(
+            JWTToken.user_id == self.id,
+            JWTToken.expiration >= (datetime.now() + timedelta(hours=app.config["REFRESH_TOKEN_EXPIRATION"]))
+        ).delete()
+
+        # Find the jwt token
+        jwt_token = JWTToken.query.filter(refresh_token=refresh_token).scalar()
+
+        if jwt_token:
+            return jwt_token.refresh_token()
+
         return None
-
-

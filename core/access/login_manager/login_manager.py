@@ -44,11 +44,11 @@ class LoginManager(object):
         else:
             setattr(self, name, func)
 
-    def _get_callback(self, name, blueprint=None):
+    def _get_callback(self, name, blueprint=None, default=None):
         if blueprint:
             _blueprint = self.blueprints.get(blueprint, None)
             func = getattr(_blueprint, name, None)
-        return func or getattr(self, name, None)
+        return func or getattr(self, name, None) or default
 
     def _load_current_user(self):
         if has_request_context() and not hasattr(stack.top, 'user'):
@@ -58,33 +58,34 @@ class LoginManager(object):
             return user
         return getattr(stack.top, 'user', self.anonymous_user)
 
-    def _callback(self, callback, blueprint):
-
-        def decorator(func):
+    def _callback(self, func, callback, blueprint):
+        def decorator(_func):
             @wraps
             def wrapper(*args, **kwargs):
-                return func(*args, **kwargs)
-            self._set_callback(callback, func, blueprint)
+                return _func(*args, **kwargs)
+            self._set_callback(callback, _func, blueprint)
             return wrapper
 
-        if callable(blueprint):
-            func = blueprint
-            blueprint = None
+        if func is not None:
             return decorator(func)
 
         return decorator
 
-    def unauthorize_callback(self, blueprint=None):
-        return self._callback("_unauthorize_callback", blueprint)
+    def unauthorize_callback(self, *args, blueprint=None):
+        func, = args or None,
+        return self._callback(func, "_unauthorize_callback", blueprint)
 
-    def reload_user_callback(self, blueprint=None):
-        return self._callback("_reload_user_callback", blueprint)
+    def reload_user_callback(self, *args, blueprint=None):
+        func, = args or None,
+        return self._callback(func, "_reload_user_callback", blueprint)
 
-    def login_user_callback(self, blueprint=None):
-        return self._callback("_login_user_callback", blueprint)
+    def login_user_callback(self, *args, blueprint=None):
+        func, = args or None,
+        return self._callback(func, "_login_user_callback", blueprint)
 
-    def user_loader(self, blueprint=None):
-        return self._callback("_user_loader", blueprint)
+    def user_loader(self, *args, blueprint=None):
+        func, = args or None,
+        return self._callback(func, "_user_loader", blueprint)
 
     @property
     def session(self):
@@ -98,11 +99,11 @@ class LoginManager(object):
             return jsonify({
                 "success" : False
             })
-        return self._get_callback('_unauthorize_callback', request.blueprint) or _unauthorize_callback
+        return self._get_callback('_unauthorize_callback', request.blueprint, _unauthorize_callback)
 
     @property
     def load_user(self):
-        return self._get_callback('_user_loader', request.blueprint) or (lambda : self.anonymous_user)
+        return self._get_callback('_user_loader', request.blueprint, lambda : self.anonymous_user)
 
     @property
     def reload_user(self):
@@ -116,7 +117,7 @@ class LoginManager(object):
                         stack.top.user = user
                         return user
             return self.anonymous_user
-        return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
+        return self._get_callback('_reload_user_callback', request.blueprint, _reload_user_callback)
 
     @property
     def login_user(self):
@@ -126,7 +127,7 @@ class LoginManager(object):
             _session['user_id'] = user.get_id()
             _session['remember'] = remember
             return user
-        return self._get_callback('_login_user_callback', request.blueprint) or _login_user_callback
+        return self._get_callback('_login_user_callback', request.blueprint, _login_user_callback)
 
     def logout(self):
         session.clear()

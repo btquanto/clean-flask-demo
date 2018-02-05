@@ -13,7 +13,11 @@ eventlet.monkey_patch()
 # monkey.patch_all()
 
 app = Flask(__name__)
-app.config.from_object("config.flaskconfig")
+app.config.from_object("config.default")
+try:
+    app.config.from_object("config.local")
+except Exception as ignored:
+    pass
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 # SQLAlchemy
@@ -36,7 +40,7 @@ lm.user_loader(user_loader)
 def jwt_user_loader(payload):
     auth_key = payload["auth_key"]
     user = User.query.filter_by(auth_key=auth_key).scalar()
-    return user if user and not user.is_token_expired() else None
+    return user
 
 jwtm.init_app(app)
 jwtm.user_loader(jwt_user_loader)

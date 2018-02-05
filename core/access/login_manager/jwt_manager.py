@@ -42,7 +42,7 @@ from .mixins import AnonymousUserMixin
 class JWTManager(object):
 
     def __init__(self, app=None):
-        self.user = lambda: LocalProxy(lambda: self._load_current_user())._get_current_object()
+        self.user = LocalProxy(lambda: self._load_current_user())
         self.blueprints = {}
         self.anonymous_user = AnonymousUserMixin()
 
@@ -62,11 +62,11 @@ class JWTManager(object):
         else:
             setattr(self, name, func)
 
-    def _get_callback(self, name, blueprint=None):
+    def _get_callback(self, name, blueprint=None, default=None):
         if blueprint:
             _blueprint = self.blueprints.get(blueprint, None)
             func = getattr(_blueprint, name, None)
-        return func or getattr(self, name, None)
+        return func or getattr(self, name, None) or default
 
     def _load_current_user(self):
         if has_request_context() and not hasattr(stack.top, 'user'):
@@ -76,32 +76,30 @@ class JWTManager(object):
             return user
         return getattr(stack.top, 'user', self.anonymous_user)
 
-    def _callback(self, callback, blueprint):
-        def decorator(func):
+    def _callback(self, func, callback, blueprint):
+        def decorator(_func):
             @wraps
             def wrapper(*args, **kwargs):
-                return func(*args, **kwargs)
-            self._set_callback(callback, func, blueprint)
+                return _func(*args, **kwargs)
+            self._set_callback(callback, _func, blueprint)
             return wrapper
 
-        if callable(blueprint):
-            func = blueprint
-            blueprint = None
+        if func is not None:
             return decorator(func)
 
         return decorator
 
-    def unauthorize_callback(self, blueprint=None):
-        return self._callback("_unauthorize_callback", blueprint)
+    def unauthorize_callback(self, *args, blueprint=None):
+        func, = args or None,
+        return self._callback(func, "_unauthorize_callback", blueprint)
 
-    def reload_user_callback(self, blueprint=None):
-        return self._callback("_reload_user_callback", blueprint)
+    def reload_user_callback(self, *args, blueprint=None):
+        func, = args or None,
+        return self._callback(func, "_reload_user_callback", blueprint)
 
-    def login_user_callback(self, blueprint=None):
-        return self._callback("_login_user_callback", blueprint)
-
-    def user_loader(self, blueprint=None):
-        return self._callback("_user_loader", blueprint)
+    def user_loader(self, *args, blueprint=None):
+        func, = args or None,
+        return self._callback(func, "_user_loader", blueprint)
 
     @property
     def unauthorized(self):
@@ -109,11 +107,11 @@ class JWTManager(object):
             return jsonify({
                 "success" : False
             })
-        return self._get_callback('_unauthorize_callback', request.blueprint) or _unauthorize_callback
+        return self._get_callback('_unauthorize_callback', request.blueprint, _unauthorize_callback)
 
     @property
     def load_user(self):
-        return self._get_callback('_user_loader', request.blueprint) or (lambda : self.anonymous_user)
+        return self._get_callback('_user_loader', request.blueprint, lambda : self.anonymous_user)
 
     @property
     def reload_user(self):
@@ -129,20 +127,29 @@ class JWTManager(object):
                             stack.top.user = user
                             return user
                     except jwt.InvalidTokenError:
-                        app.logger.info("Invalid token error")
-                        pass
+                        app.logger.error("Invalid token error")
+                    except jwt.ExpiredSignatureError:
+                        app.logger.error("Expired signature error")
+                    except Exception as e:
+                        app.logger.error(e)
 
             return self.anonymous_user
 
-        return self._get_callback('_reload_user_callback', request.blueprint) or _reload_user_callback
+        return self._get_callback('_reload_user_callback', request.blueprint, _reload_user_callback)
 
     def generate_token(self, payload):
         return jwt.encode(payload, self._secret_key, algorithm=self._auth_algorithm)
 
-    def jwt_required(self, func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if self.user.is_authenticated:
-                return func(*args, **kwargs)
-            return self.unauthorized()
-        return wrapper
+    def jwt_required(self, *args, unauthorized_callback=None):
+        def decorator(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                if self.user.is_authenticated:
+                    return func(*args, **kwargs)
+                return unauthorized_callback() if unauthorized_callback is not None else self.unauthorized()
+            return wrapper
+        if args:
+            func, = args
+            return decorator(func)
+        return decorator
+

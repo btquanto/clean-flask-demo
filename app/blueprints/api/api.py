@@ -10,9 +10,12 @@ node = Blueprint("api", __name__, template_folder="templates")
 def index():
     return json_response({ "success": True })
 
-@node.route("/sessions", methods=["POST", "DELETE"])
+@node.route("/sessions", methods=["GET", "POST", "DELETE"])
 def resource_sessions():
     from .resources import sessions
+
+    if request.method == "GET":
+        return sessions.get()
 
     if request.method == "POST":
         return sessions.post()
@@ -20,12 +23,15 @@ def resource_sessions():
     if request.method == "DELETE":
         return sessions.delete()
 
-@node.route("/test", methods=["GET"])
-def test():
-    from .resources import test
+@node.route("/users", methods=["POST", "DELETE"])
+def resource_users():
+    from .resources import users
 
-    if request.method == "GET":
-        return test.get()
+    if request.method == "POST":
+        return users.post()
+
+    if request.method == "DELETE":
+        return users.delete()
 
 
 @jwtm.unauthorize_callback(blueprint=node.name)

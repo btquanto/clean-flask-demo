@@ -1,8 +1,8 @@
 """Init rbac schema
 
-Revision ID: cd91bc5505de
+Revision ID: 7a677302d64e
 Revises: 
-Create Date: 2018-01-29 08:26:06.048578
+Create Date: 2018-02-05 04:22:39.801999
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cd91bc5505de'
+revision = '7a677302d64e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,7 +30,6 @@ def upgrade():
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('password', sa.String(length=255), nullable=True),
     sa.Column('auth_key', sa.String(length=255), nullable=True),
-    sa.Column('session_expiry', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('roles_parents',
