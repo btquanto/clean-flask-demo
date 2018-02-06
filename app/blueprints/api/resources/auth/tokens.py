@@ -8,10 +8,7 @@ from core.response import json_response
 from app import db, jwtm
 from app.models import User
 
-def unauthorized_callback():
-    return json_response({ "error": "unauthorized" }, 401)
-
-@jwtm.jwt_required(unauthorized_callback=unauthorized_callback)
+@jwtm.jwt_required
 def get():
     """Refresh the login session by refreshing the authentication token
 
@@ -73,15 +70,21 @@ def post():
     if not bcrypt.checkpw(password.encode(), user.password.encode()):
         return json_response({ "error" : "password_mismatched" }, 401)
 
-    payload = {
-        'auth_key': user.gen_auth_key(),
-        'exp': datetime.now() + timedelta(seconds=app.config['JWT_EXPIRATION'])
-    }
+    access_token = user.generate_token(timedelta(seconds=app.config['TOKEN_LIFETIME']))
+
+    db.session.add(access_token)
     db.session.commit()
 
+    payload = {
+        'token': access_token.token,
+        'exp': datetime.now() + timedelta(seconds=app.config['JWT_LIFETIME'])
+    }
     jwt_token = jwtm.generate_token(payload)
 
-    return json_response({ "auth_key": jwt_token })
+    return json_response({
+        "jwt_token": jwt_token,
+        "refresh_token": access_token.refresh_token
+    })
 
 @jwtm.jwt_required
 def delete():
@@ -96,7 +99,6 @@ def delete():
                 - error: The error message if deleting login session fails
     """
     user = jwtm.user._get_current_object()
-    user.auth_key = None
     db.session.commit()
 
     return json_response({ "success" : True })

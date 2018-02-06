@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from os.path import abspath, dirname
 
 # Application configuration
 DEBUG = False
@@ -31,8 +30,8 @@ SQLALCHEMY_POOL_TIMEOUT = -1
 # Role-based access control
 RBAC_DENY_ALL_BY_DEFAULT = False
 
-# JWT Configuration
-REFRESH_TOKEN_EXPIRATION = 24 # hours
-JWT_EXPIRATION = 3600 # seconds
+# Authentication tokens
+TOKEN_LIFETIME = 604800 # (seconds) 1 week
+JWT_LIFETIME = 3600 # (seconds) 1 hour
 JWT_AUTH_HEADER_PREFIX = "Bearer"
 JWT_ALGORITHM = "HS256"

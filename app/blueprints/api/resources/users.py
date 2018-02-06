@@ -46,18 +46,25 @@ def post():
     user.username = username
     user.email = email
     user.password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-    user.gen_auth_key(timedelta(seconds=app.config['JWT_EXPIRATION']))
+
+    db.session.add(user)
+    db.session.flush()
+
+    access_token = user.generate_token(timedelta(seconds=app.config['TOKEN_LIFETIME']))
+
+    db.session.add(access_token)
+    db.session.commit()
 
     payload = {
-        'auth_key': user.auth_key,
-        'exp': user.session_expiry
+        'token': access_token.token,
+        'exp': datetime.now() + timedelta(seconds=app.config['JWT_LIFETIME'])
     }
     jwt_token = jwtm.generate_token(payload)
 
-    db.session.add(user)
-    db.session.commit()
-
-    return json_response({ "auth_key": jwt_token })
+    return json_response({
+        "jwt_token": jwt_token,
+        "refresh_token": access_token.refresh_token
+    })
 
 def delete():
     """Delete a user
