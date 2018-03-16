@@ -5,7 +5,7 @@ import eventlet, logging
 from flask import Flask, redirect, url_for, send_from_directory
 from app import db, lm, jwtm, session, rbac, es, socketio
 from app.blueprints import user, home, rtc, admin, api
-from app.models import User, Role
+from app.models import User, Role, AccessToken
 from core.reverse_proxied import ReverseProxied
 
 # Configuration
@@ -30,20 +30,20 @@ socketio.init_app(app, async_mode='eventlet')
 session.init_app(app)
 
 # Login Managers
-def user_loader(user_id):
-    return User.query.filter_by(id=user_id).scalar()
+def load_user_by_id(user_id):
+    return User.query.get(user_id)
 
 lm.init_app(app, with_session=True)
-lm.user_loader(user_loader)
+lm.user_loader(load_user_by_id)
 
 # JWT Manager
-def jwt_user_loader(payload):
-    auth_key = payload["auth_key"]
-    user = User.query.filter_by(auth_key=auth_key).scalar()
-    return user
+def load_user_from_jwt_payload(payload):
+    token = payload["token"]
+    access_token = AccessToken.query.filter(token=token).scalar()
+    return access_token is not None and access_token.user or None
 
 jwtm.init_app(app)
-jwtm.user_loader(jwt_user_loader)
+jwtm.user_loader(load_user_from_jwt_payload)
 
 # RBAC
 rbac.init_app(app)

@@ -8,7 +8,6 @@ from core.response import json_response
 from app import db, jwtm
 from app.models import User
 
-@jwtm.jwt_required
 def get():
     """Refresh the login session by refreshing the authentication token
 
@@ -20,6 +19,11 @@ def get():
                 - jwt_token: The jwt token for subsequent authorization
                 - error: The error message if refreshing session fails
     """
+    auth_header = request.headers.get('Authorization', None)
+    if auth_header:
+        prefix, refresh_token = auth_header.split()
+
+
     user = jwtm.user._get_current_object()
 
     payload = {
