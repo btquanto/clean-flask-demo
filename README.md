@@ -4,7 +4,7 @@ A skeleton for developing flask applications
 
 # Quickstart
 
-Make sure you have `docker` and `docker-compose` installed. If you don't, install them following instructions on [Docker's website](https://www.docker.com/)
+Make sure you have `docker` and `docker-compose` installed. If you don't, install them following instructions on [Docker's website](https://www.docker.com/). You will also need `npm` for building es6 and sass
 
 1. Create `docker-compose.yml` from `docker-compose.yml.template`. Edit `docker-compose.yml` as fit (recommended).
 
@@ -12,18 +12,16 @@ Make sure you have `docker` and `docker-compose` installed. If you don't, instal
     cp docker-compose.yml.template docker-compose.yml
     ```
 
-2. Create `config/flaksconfig.py` from `config/flaskconfig.py.template`. Edit `config/flaskconfig.py` as fit.
-
-    ```
-    cp config/flaskconfig.py.template config/flaskconfig.py
-    ```
-
+2. Create `config/local.py` and override configurations from `config/default.py` as fit.
 3. Edit `scripts/uwsgi_config.ini` as fit.
 4. Run `docker-compose`. You may need to run this command as sudo if you haven't added your user into the `docker` group.
 
     ```
     docker-compose up
     ```
+5. Run `docker-compose exec flask /bin/bash -c "python3 flaskscript.py db upgrade"` to create database tables
+6. Run `npm install` to install js dependencies
+7. Run `npm run gulp` to generate javascript and css
 
 # Features
 
