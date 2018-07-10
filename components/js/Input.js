@@ -27,7 +27,7 @@ class Input extends Component {
 
     render() {
         let inputGroupClasses = classNames({
-            'field':     true,
+            'field': true,
             'field-not-empty': this.state.active
         });
 
@@ -42,9 +42,15 @@ class Input extends Component {
                 </label>
                 <input
                     className="field-input"
-                    defaultValue={this.state.value}
+                    value={this.state.value}
                     id={this.props.label}
-                    onChange={this.onTextChanged.bind(this)}
+                    onChange={e => {
+                        let value = e.target.value;
+                        this.setState({
+                            value: value,
+                            active: !!value
+                        });
+                    }}
                     placeholder={this.props.label}
                     type={this.props.type}
                 />

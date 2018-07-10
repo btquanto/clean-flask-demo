@@ -1,17 +1,10 @@
 #!/bin/bash
 DEBUG=false;
-SKIP_REQUIREMENTS_CHECK=true;
+SKIP_REQUIREMENTS_CHECK=false;
 
 set -e
 
 cd /src
-
-if ! [ -f config/flaskconfig.py ]
-then
-    echo "Configuration file `config/flaskconfig.py` not found"
-    echo "Please create one using `config/flaskconfig.py.template` as the template"
-    exit 0;
-fi;
 
 if [ -f requirements.txt ]
 then

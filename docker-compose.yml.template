@@ -9,8 +9,6 @@ services:
       - POSTGRES_PASSWORD=mysecretpassword
   flask:
     image: btquanto/docker-flask-py3:latest
-    environment:
-      - UWSGI_CONFIG_FILE=config/uwsgi_config.ini
     links:
       - postgres
     ports:

@@ -217,48 +217,44 @@ class ChatRoomScreen extends Component {
     }
 }
 
-export default connect((state, props) => {
-    return {
-        localUser: state.chatRoom.localUser,
-        remoteUser: state.chatRoom.remoteUser,
-        room: state.chatRoom.room
-    };
-}, (dispatch) => {
-    return {
-        addLocalStream: stream => dispatch({
-            type: 'ADD_LOCAL_STREAM',
-            stream: stream
-        }),
-        addRemoteUser: user => dispatch({
-            type: 'ADD_REMOTE_USER',
-            user: user
-        }),
-        addRemoteStream: stream => dispatch({
-            type: 'ADD_REMOTE_STREAM',
-            stream: stream
-        }),
-        removeRemoteStream: () => dispatch({
-            type: 'REMOVE_REMOTE_STREAM'
-        }),
-        joinRoom: (user, room) => dispatch({
-            type: 'JOIN_ROOM',
-            user: user,
-            room: room
-        }),
-        updateWhenUserGoesOnline: (user, users) => dispatch({
-            type: 'UPDATE_WHEN_USER_GOES_ONLINE',
-            user: user,
-            users: users
-        }),
-        updateWhenUserGoesOffline: (user, users) => dispatch({
-            type: 'UPDATE_WHEN_USER_GOES_OFFLINE',
-            user: user,
-            users: users
-        }),
-        receiveMessage: (user, message) => dispatch({
-            type: 'RECEIVE_MESSAGE',
-            user: user,
-            message: message
-        })
-    };
-})(ChatRoomScreen);
+export default connect((state, props) => ({
+    localUser: state.chatRoom.localUser,
+    remoteUser: state.chatRoom.remoteUser,
+    room: state.chatRoom.room
+}), (dispatch) => ({
+    addLocalStream: stream => dispatch({
+        type: 'ADD_LOCAL_STREAM',
+        stream: stream
+    }),
+    addRemoteUser: user => dispatch({
+        type: 'ADD_REMOTE_USER',
+        user: user
+    }),
+    addRemoteStream: stream => dispatch({
+        type: 'ADD_REMOTE_STREAM',
+        stream: stream
+    }),
+    removeRemoteStream: () => dispatch({
+        type: 'REMOVE_REMOTE_STREAM'
+    }),
+    joinRoom: (user, room) => dispatch({
+        type: 'JOIN_ROOM',
+        user: user,
+        room: room
+    }),
+    updateWhenUserGoesOnline: (user, users) => dispatch({
+        type: 'UPDATE_WHEN_USER_GOES_ONLINE',
+        user: user,
+        users: users
+    }),
+    updateWhenUserGoesOffline: (user, users) => dispatch({
+        type: 'UPDATE_WHEN_USER_GOES_OFFLINE',
+        user: user,
+        users: users
+    }),
+    receiveMessage: (user, message) => dispatch({
+        type: 'RECEIVE_MESSAGE',
+        user: user,
+        message: message
+    })
+}))(ChatRoomScreen);

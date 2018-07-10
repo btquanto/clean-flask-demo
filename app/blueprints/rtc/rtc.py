@@ -14,6 +14,10 @@ rooms = {}
 def index():
     return render_template("rtc/index.html")
 
+@node.route("/hello")
+def hello():
+    return "Hello World"
+
 @socketio.on('connect', namespace=SOCKET_NAMESPACE)
 def socketio_handle_connect():
     user_id = request.sid

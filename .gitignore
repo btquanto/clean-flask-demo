@@ -1,6 +1,6 @@
 .env/*
 *.pyc
-config/flaskconfig.py
+config/local.py
 docker-compose.yml
 flask_session
 node_modules

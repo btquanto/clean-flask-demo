@@ -1,6 +1,6 @@
-if [ -f config/uwsgi_config.ini ]
+if [ -f scripts/config/uwsgi.ini ]
 then
-    exec uwsgi --ini config/uwsgi_config.ini --logto ./logs/uwsgi.log
+    exec uwsgi --ini scripts/config/uwsgi.ini --logto ./logs/uwsgi.log
 else
     exec uwsgi --socket 0.0.0.0:8000 --gevent 1000 --http-websockets -w application:app
 fi;

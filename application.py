@@ -3,9 +3,9 @@
 # from gevent import monkey
 import eventlet, logging
 from flask import Flask, redirect, url_for, send_from_directory
-from app import db, lm, apilm, session, rbac, es, socketio
-from app.blueprints import user, home, rtc
-from app.models import User, Role
+from app import db, lm, jwtm, session, rbac, es, socketio
+from app.blueprints import user, home, rtc, admin, api
+from app.models import User, Role, AccessToken
 from core.reverse_proxied import ReverseProxied
 
 # Configuration
@@ -13,7 +13,11 @@ eventlet.monkey_patch()
 # monkey.patch_all()
 
 app = Flask(__name__)
-app.config.from_object("config.flaskconfig")
+app.config.from_object("config.default")
+try:
+    app.config.from_object("config.local")
+except Exception as ignored:
+    pass
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 # SQLAlchemy
@@ -26,14 +30,20 @@ socketio.init_app(app, async_mode='eventlet')
 session.init_app(app)
 
 # Login Managers
-def user_loader(user_id):
-    return User.get(user_id)
+def load_user_by_id(user_id):
+    return User.query.get(user_id)
 
-lm.init_app(app)
-lm.user_loader(user_loader)
+lm.init_app(app, with_session=True)
+lm.user_loader(load_user_by_id)
 
-apilm.init_app(app, with_session=True)
-apilm.user_loader(user_loader)
+# JWT Manager
+def load_user_from_jwt_payload(payload):
+    token = payload["token"]
+    access_token = AccessToken.query.filter(token=token).scalar()
+    return access_token is not None and access_token.user or None
+
+jwtm.init_app(app)
+jwtm.user_loader(load_user_from_jwt_payload)
 
 # RBAC
 rbac.init_app(app)
@@ -44,6 +54,8 @@ rbac.user_model(User)
 es.init_app(app)
 
 # Register blueprints
+app.register_blueprint(admin.node, url_prefix="/admin")
+app.register_blueprint(api.node, url_prefix="/api")
 app.register_blueprint(home.node, url_prefix="/home")
 app.register_blueprint(user.node, url_prefix="/user")
 app.register_blueprint(rtc.node, url_prefix="/rtc")
@@ -56,7 +68,7 @@ app.logger.setLevel(logging.INFO)
 # Default route
 @app.route('/')
 def bootstrap():
-    return redirect('/rtc/')
+    return redirect('/home/')
 
 @app.route('/nodes/<path:filename>')
 def nodes_static(filename):

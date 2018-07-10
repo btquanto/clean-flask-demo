@@ -36,10 +36,6 @@ class ReduxRTC extends Component {
     }
 }
 
-export default connect((state, props) => {
-    return {
-        user: state.app.user
-    };
-}, dispatch => {
-    return {};
-})(ReduxRTC);
+export default connect((state, props) => ({
+    user: state.app.user
+}), dispatch => ({}))(ReduxRTC);

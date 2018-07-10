@@ -1,4 +1,4 @@
-if [ -f config/gunicorn_config.py ]
+if [ -f scripts/config/gunicorn.py ]
 then
-    exec gunicorn --config config/gunicorn_config.py application:app
+    exec gunicorn --config scripts/config/gunicorn.py application:app
 fi;
