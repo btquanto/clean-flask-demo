@@ -7,6 +7,15 @@ services:
       - POSTGRES_USER=flask-skeleton
       - POSTGRES_DB=flask-skeleton
       - POSTGRES_PASSWORD=mysecretpassword
+  node:
+    image: btquanto/node:v1.0
+    stdin_open: true
+    working_dir: /src
+    volumes:
+      - type: bind
+        source: ./
+        target: /src
+    command: /bin/sh
   flask:
     image: btquanto/docker-flask-py3:latest
     links:
