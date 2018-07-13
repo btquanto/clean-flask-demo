@@ -20,13 +20,11 @@ services:
     image: btquanto/docker-flask-py3:latest
     links:
       - postgres
-    ports:
-      - 8000:8000
     volumes:
       - type: bind
         source: ./
         target: /src
-    entrypoint: ["/bin/bash", "/src/scripts/flask.sh"]
+    entrypoint: ["/bin/bash", "/src/flask.sh"]
   nginx:
     image: nginx:1.13.0-alpine
     ports:
@@ -35,7 +33,7 @@ services:
       - flask
     volumes:
       - ./:/src:ro
-      - ./scripts/ssl:/etc/nginx/ssl:ro
-      - ./scripts/nginx.secure.conf:/etc/nginx/conf.d/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
 
     command: ["nginx", "-g", "daemon off;"]

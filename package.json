@@ -27,7 +27,9 @@
     "classnames": "^2.2.5",
     "font-awesome": "^4.7.0",
     "form-data": "^2.3.1",
+    "hoek": "^5.0.3",
     "jquery": "^3.3.1",
+    "npm": "^6.2.0",
     "prop-types": "^15.6.0",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
@@ -42,8 +44,7 @@
     "socket.io-client": "^2.0.4",
     "tether": "^1.4.3",
     "underscore": "^1.8.3",
-    "webrtc-adapter": "^6.0.3",
-    "hoek": "^5.0.3"
+    "webrtc-adapter": "^6.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

@@ -51,10 +51,14 @@ class LoginManager(object):
         return func or getattr(self, name, None) or default
 
     def _load_current_user(self):
+        app.logger.debug("Load Current User")
         if has_request_context() and not hasattr(stack.top, 'user'):
+            app.logger.debug("Doesn't have user in stack")
             user = self.reload_user()
             if user is None:
+                app.logger.debug("Failed to reload user")
                 return self.anonymous_user
+            app.logger.debug("Reload user succeeded")
             return user
         return getattr(stack.top, 'user', self.anonymous_user)
 
@@ -84,14 +88,14 @@ class LoginManager(object):
         return self._callback(func, "_login_user_callback", blueprint)
 
     def user_loader(self, *args, blueprint=None):
-        func, = args or None,
+        func, = args or None
         return self._callback(func, "_user_loader", blueprint)
 
     @property
     def session(self):
-        _session = session.get(self.__hash__(), {})
-        session[self.__hash__()] = _session
-        return _session
+        # _session = session.get(self.__hash__(), {})
+        # session[self.__hash__()] = _session
+        return session
 
     @property
     def unauthorized(self):
@@ -108,10 +112,14 @@ class LoginManager(object):
     @property
     def reload_user(self):
         def _reload_user_callback():
+            app.logger.debug("With Session? {withSession}".format(withSession=self._with_session))
             if self._with_session:
                 _session = self.session
                 user_id = _session.get('user_id', None)
+                app.logger.debug("User ID: {user_id}".format(user_id=user_id))
                 if user_id is not None:
+                    app.logger.debug(self.load_user)
+                    app.logger.debug(user_id)
                     user = self.load_user(user_id)
                     if user is not None:
                         stack.top.user = user
@@ -121,7 +129,7 @@ class LoginManager(object):
 
     @property
     def login_user(self):
-        def _login_user_callback(user, remember):
+        def _login_user_callback(user, remember=False):
             stack.top.user = user
             _session = self.session
             _session['user_id'] = user.get_id()
