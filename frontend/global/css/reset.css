@@ -1,0 +1,296 @@
+/* 
+ * Reset
+ * colors
+ * fontsize
+ * align
+ * spacer
+ * general
+ * form
+ */
+
+/* Reset
+----------------------------------------------------------------------------------------------------*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+    padding: 0px;
+    margin: 0px;
+}
+
+body,
+p,
+figure {
+    padding: 0px;
+    margin: 0px;
+}
+
+ul {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+}
+
+li,
+dl,
+dt,
+dd {
+    padding: 0px;
+    margin: 0px;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    *behavior: url(../js/boxsizing.htc);
+}
+
+img {
+    border: none;
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: #767676;
+    text-decoration: none;
+}
+
+a,
+a:hover {
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease
+}
+
+input[type="text"],
+select {
+    height: 30px;
+    width: 100%;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    padding: 0;
+    margin: 0;
+}
+
+textarea {
+    resize: none;
+    width: 100%;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    color: #333;
+    font-family: "メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Verdana", "MS P Gothic", "ＭＳ Ｐゴシック", sans-serif;
+    font-size: 12px;
+    font-size: 1.2rem; /* 1 */
+    line-height: 150%;
+    margin: 0;
+    padding: 0;
+}
+
+/* -- colors -- */
+.red {
+    color: #e84c3d;
+}
+
+/* -- fontsize -- */
+.fs10 {
+    font-size: 1rem;
+}
+
+.fs12 {
+    font-size: 1.2rem;
+}
+
+.fs14 {
+    font-size: 1.4rem;
+}
+
+.fs16 {
+    font-size: 1.6rem;
+}
+
+.fs18 {
+    font-size: 1.8rem;
+}
+
+.fs20 {
+    font-size: 2rem;
+}
+
+/* -- align -- */
+.tcenter {
+    text-align: center;
+}
+
+.tleft {
+    text-align: left;
+}
+
+.tright {
+    text-align: right;
+}
+
+.pleft {
+    float: left;
+}
+
+.pright {
+    float: right;
+}
+
+/* -- spacer -- */
+.line-10 {
+    clear: both;
+    display: table;
+    height: 10px;
+    width: 100%;
+}
+
+.line-20 {
+    clear: both;
+    display: table;
+    height: 20px;
+    width: 100%;
+}
+
+.line-50 {
+    clear: both;
+    display: table;
+    height: 50px;
+    width: 100%;
+}
+
+.m-r15 {
+    margin-right: 15px;
+}
+
+.m-l15 {
+    margin-left: 15px;
+}
+
+.m-b15 {
+    margin-bottom: 15px;
+}
+
+.m-t15 {
+    margin-top: 15px;
+}
+
+.p-r15 {
+    padding-right: 15px;
+}
+
+.p-l15 {
+    padding-left: 15px;
+}
+
+.p-b15 {
+    padding-bottom: 15px;
+}
+
+.p-t15 {
+    padding-top: 15px;
+}
+
+/* -- mode -- */
+.sp {
+}
+
+.pc {
+}
+
+/* $general */
+.clr:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.container {
+    clear: both;
+    margin: 0 auto;
+    width: 80%;
+}
+
+/* - header - */
+.header {
+}
+
+.logo {
+}
+
+.navbox {
+}
+
+.hlink {
+}
+
+/* - mainvisual - */
+.main-visual {
+}
+
+/* - main - */
+.main {
+}
+
+.block {
+}
+
+.aside {
+}
+
+/* - footer - */
+.footer {
+}
+
+.flogo {
+}
+
+.fnav {
+}
+
+.flink {
+}
+
+.fcopy {
+}
+
+/* form */
+.row {
+    clear: both;
+    display: table;
+    width: 100%;
+}
+
+.col {
+    float: left;
+}
+

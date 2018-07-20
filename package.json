@@ -1,0 +1,75 @@
+{
+  "name": "flask-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gulp": "gulp",
+    "start": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/btquanto/clean-flask-demo.git"
+  },
+  "keywords": [
+    "flask",
+    "demo"
+  ],
+  "author": "Quan To <btquanto@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/btquanto/clean-flask-demo/issues"
+  },
+  "homepage": "https://github.com/btquanto/clean-flask-demo#readme",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "bootstrap": "^4.0.0",
+    "classnames": "^2.2.5",
+    "connected-react-router": "^4.3.0",
+    "font-awesome": "^4.7.0",
+    "form-data": "^2.3.1",
+    "hoek": "^5.0.3",
+    "jquery": "^3.3.1",
+    "npm": "^6.2.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.1.0",
+    "react-dom": "^16.1.0",
+    "react-modal": "^3.1.11",
+    "react-popup": "^0.8.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "rxjs": "^5.4.3",
+    "socket.io-client": "^2.0.4",
+    "tether": "^1.4.3",
+    "underscore": "^1.8.3",
+    "webrtc-adapter": "^6.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-clean-css": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-sass-import": "^1.0.0",
+    "gulp-uglify": "^3.0.0",
+    "merge-stream": "^1.0.1",
+    "pump": "^1.0.2",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^3.10.0",
+    "webpack-stream": "^4.0.0"
+  }
+}

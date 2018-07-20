@@ -1,4 +1,12 @@
 .env/*
 *.pyc
-flaskconfig.py
-scripts/gunicorn_config.py
+config/local.py
+docker-compose.yml
+flask_session
+node_modules
+static/assets
+assets/
+.idea/
+*__pycache__*
+frontend/app/js/Api.js___jb_old___
+.venv
