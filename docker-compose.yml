@@ -8,7 +8,7 @@ services:
       - POSTGRES_DB=flask
       - POSTGRES_PASSWORD=secret!!!123
   # node:
-  #   image: btquanto/node:v1.0
+  #   image: node:9.11-jessie
   #   stdin_open: true
   #   working_dir: /src
   #   volumes:
@@ -26,7 +26,7 @@ services:
       - type: bind
         source: ./
         target: /src
-    entrypoint: ["/bin/bash", "/src/scripts/flask.sh"]
+    entrypoint: ["/bin/bash", "/src/flask.sh"]
   nginx:
     image: nginx:1.13.0-alpine
     ports:
@@ -35,6 +35,6 @@ services:
       - flask
     volumes:
       - ./:/src:ro
-      - ./scripts/ssl:/etc/nginx/ssl:ro
-      - ./scripts/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
     command: ["nginx", "-g", "daemon off;"]
