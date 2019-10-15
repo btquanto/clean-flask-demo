@@ -3,7 +3,7 @@ import secrets
 from datetime import datetime, timedelta
 from flask import current_app as app
 from core.access.login_manager.mixins import UserMixin as LoginUserMixin
-from core.access.rnac.models import UserMixin as RbacUserMixin
+from core.access.rbac.models import UserMixin as RbacUserMixin
 from app import db
 
 users_roles = db.Table(
