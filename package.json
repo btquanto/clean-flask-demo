@@ -23,7 +23,7 @@
   "homepage": "https://github.com/btquanto/clean-flask-demo#readme",
   "dependencies": {
     "axios": "^0.18.1",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
     "connected-react-router": "^4.3.0",
     "font-awesome": "^4.7.0",
