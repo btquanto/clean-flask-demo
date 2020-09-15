@@ -1,0 +1,335 @@
+[2019-10-15 08:56:47 +0700] [1] [INFO] Starting gunicorn 19.9.0
+[2019-10-15 08:56:47 +0700] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+[2019-10-15 08:56:47 +0700] [1] [INFO] Using worker: eventlet
+[2019-10-15 08:56:47 +0700] [80] [INFO] Booting worker with pid: 80
+[2019-10-15 08:56:47 +0700] [81] [INFO] Booting worker with pid: 81
+[2019-10-15 08:56:47 +0700] [82] [INFO] Booting worker with pid: 82
+[2019-10-15 08:56:47 +0700] [83] [INFO] Booting worker with pid: 83
+[2019-10-15 08:56:47 +0700] [84] [INFO] Booting worker with pid: 84
+[2019-10-15 08:56:47 +0700] [85] [INFO] Booting worker with pid: 85
+[2019-10-15 08:56:47 +0700] [86] [INFO] Booting worker with pid: 86
+[2019-10-15 08:56:47 +0700] [87] [INFO] Booting worker with pid: 87
+[2019-10-15 08:56:47 +0700] [88] [INFO] Booting worker with pid: 88
+[2019-10-15 08:56:47 +0700] [89] [INFO] Booting worker with pid: 89
+[2019-10-15 08:56:54 +0700] [84] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:54 +0700] [84] [INFO] Worker exiting (pid: 84)
+[2019-10-15 08:56:55 +0700] [83] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:55 +0700] [83] [INFO] Worker exiting (pid: 83)
+[2019-10-15 08:56:55 +0700] [82] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:55 +0700] [80] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:55 +0700] [80] [INFO] Worker exiting (pid: 80)
+[2019-10-15 08:56:55 +0700] [82] [INFO] Worker exiting (pid: 82)
+[2019-10-15 08:56:55 +0700] [89] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:55 +0700] [89] [INFO] Worker exiting (pid: 89)
+[2019-10-15 08:56:55 +0700] [87] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:55 +0700] [87] [INFO] Worker exiting (pid: 87)
+[2019-10-15 08:56:55 +0700] [88] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:55 +0700] [81] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:55 +0700] [81] [INFO] Worker exiting (pid: 81)
+[2019-10-15 08:56:55 +0700] [88] [INFO] Worker exiting (pid: 88)
+[2019-10-15 08:56:55 +0700] [85] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:56 +0700] [85] [INFO] Worker exiting (pid: 85)
+[2019-10-15 08:56:56 +0700] [86] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/geventlet.py", line 102, in init_process
+    super(EventletWorker, self).init_process()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 129, in init_process
+    self.load_wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/workers/base.py", line 138, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load
+    return self.load_wsgiapp()
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/app/wsgiapp.py", line 41, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/usr/local/lib/python3.6/dist-packages/gunicorn/util.py", line 350, in import_app
+    __import__(module)
+  File "/src/application.py", line 5, in <module>
+    from app import blueprints
+  File "/src/app/blueprints/__init__.py", line 3, in <module>
+    from . import api
+  File "/src/app/blueprints/api/__init__.py", line 13, in <module>
+    from .auth import *
+  File "/src/app/blueprints/api/auth.py", line 9, in <module>
+    from app.models import User
+  File "/src/app/models/__init__.py", line 2, in <module>
+    from .user import User
+  File "/src/app/models/user.py", line 6, in <module>
+    from core.access.rnac.models import UserMixin as RbacUserMixin
+ModuleNotFoundError: No module named 'core.access.rnac'
+[2019-10-15 08:56:56 +0700] [86] [INFO] Worker exiting (pid: 86)
+[2019-10-15 08:56:57 +0700] [1] [INFO] Shutting down: Master
+[2019-10-15 08:56:57 +0700] [1] [INFO] Reason: Worker failed to boot.

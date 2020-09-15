@@ -2,3 +2,4 @@
 *.pyc
 flaskconfig.py
 scripts/gunicorn_config.py
+node_modules
