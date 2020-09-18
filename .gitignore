@@ -1,5 +1,6 @@
 .env/*
 *.pyc
-flaskconfig.py
-scripts/gunicorn_config.py
+logs/*
+src/settings.py
+_scripts/gunicorn.py
 node_modules

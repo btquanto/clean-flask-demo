@@ -1,54 +1,48 @@
 version: '3.8'
 
+networks:
+  app:
+
 volumes:
   database:
   wheeldir:
 
 services:
-  postgres:
-    image: postgres:9.6.1-alpine
-    networks:
-      app:
-        ipv4_address: 172.16.238.1
-    environment:
-      - POSTGRES_USERNAME=flask_skeleton
-      - POSTGRES_DB=flask_skeleton
-      - POSTGRES_PASSWORD=mysecretpassword
-  flask:
-    image: btquanto/docker-flask-py3:latest
-    networks:
-      app:
-        ipv4_address: 172.16.238.2
-    environment:
-      - UWSGI_CONFIG_FILE=uwsgi_config.ini
-    links:
-      - postgres
-    volumes:
-      - ./:/src
-      - flask_data:/tmp/
-    entrypoint: ["/bin/bash", "/src/scripts/flask.sh"]
-  nginx:
-    image: nginx:1.13.0-alpine
-    networks:
-      app:
-        ipv4_address: 172.16.238.3
-    ports:
-      - 8080:8080
-      - 8088:8088
-    links:
-      - flask
-    depends_on:
-      - flask
-    volumes:
-      - ./:/src
-      - ./scripts/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
-      - flask_data:/tmp/
-    command: ["nginx", "-g", "daemon off;"]
-
-networks:
   app:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.16.238.0/24
+    image: btquanto:python3-focal
+    build:
+      context: ./_docker/python3-focal
+      dockerfile: Dockerfile
+    networks:
+      - app
+    environment:
+      - DEBUG=true
+      - FLASK_ENV=development
+      - FLASK_APP=/src/application/application.py
+    ports:
+      - 5000:5000
+    volumes:
+      - ./src:/src
+      - ./_scripts:/scripts:ro
+      - wheeldir:/wheeldir
+    command: ["/bin/bash", "/scripts/flash.sh"]
+  postgres:
+    image: postgres:12.4-alpine
+    networks:
+      - app
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_DB=app
+      - POSTGRES_PASSWORD=mysecretpassword
+    volumes:
+      - database:/var/lib/postgresql/data
+  # nginx:
+  #   image: nginx:1.19.2-alpine
+  #   networks:
+  #     - app
+  #   ports:
+  #     - 8080:9090
+  #   volumes:
+  #     - ./:/src
+  #     - ./_scripts/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+  #   command: ["nginx", "-g", "daemon off;"]
