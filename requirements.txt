@@ -10,7 +10,7 @@ flask==1.0.2
 gunicorn==19.9.0
 jinja2==2.10
 psycopg2==2.7.5
-pyjwt==1.6.4
+pyjwt==2.4.0
 python-dateutil==2.7.3
 pytz==2018.5
 simplejson==3.16.0
